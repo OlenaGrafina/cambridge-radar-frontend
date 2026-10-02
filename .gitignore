@@ -1,0 +1,20 @@
+# deps
+node_modules/
+
+# next
+.next/
+out/
+next-env.d.ts
+
+# env — this repo is public, never commit secrets
+.env
+.env.*
+!.env.example
+
+# misc
+*.log
+*.tsbuildinfo
+.DS_Store
+.vercel
+.open-next
+.wrangler
