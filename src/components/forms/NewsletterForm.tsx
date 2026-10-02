@@ -39,7 +39,7 @@ export function NewsletterForm({source, compact = false}: {source: string; compa
           type="email"
           required
           autoComplete="email"
-          placeholder="you@example.com"
+          placeholder="Type your email…"
           className="field min-w-0 flex-1"
         />
         <button
@@ -57,9 +57,6 @@ export function NewsletterForm({source, compact = false}: {source: string; compa
         <p role="alert" className="mt-2 text-sm text-signal">
           {message}
         </p>
-      )}
-      {!compact && (
-        <p className="meta mt-3 normal-case tracking-normal">One email per new article. Unsubscribe in one click.</p>
       )}
     </form>
   )

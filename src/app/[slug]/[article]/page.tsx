@@ -5,7 +5,6 @@ import {notFound, permanentRedirect} from 'next/navigation'
 import {ArticleTracker} from '@/components/analytics/ArticleTracker'
 import {AuthorCard} from '@/components/article/AuthorCard'
 import {Body, headingIds, withoutRepeatedDek} from '@/components/article/Body'
-import {Comments} from '@/components/article/Comments'
 import {ReadingProgress} from '@/components/article/ReadingProgress'
 import {Share} from '@/components/article/Share'
 import {Toc, TocDisclosure} from '@/components/article/Toc'
@@ -235,7 +234,7 @@ export default async function ArticlePage({params}: Params) {
             )}
 
             <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-y border-rule py-4">
-              <p className="kicker">Share this analysis</p>
+              <p className="kicker">Share this:</p>
               <Share url={url} title={post.title} image={imageUrl(post.mainImage, 1000)} />
             </div>
 
@@ -277,9 +276,6 @@ export default async function ArticlePage({params}: Params) {
               </div>
             </aside>
 
-            <div className="cv-auto mt-section">
-              <Comments comments={compact(post.comments)} postId={post._id} open={post.allowComments !== false} />
-            </div>
           </div>
 
           <aside aria-label="Contents and related" className="hidden lg:col-span-4 lg:col-start-9 lg:block">
@@ -288,7 +284,7 @@ export default async function ArticlePage({params}: Params) {
               {related.length > 0 && (
                 <section aria-labelledby="related-title">
                   <h2 id="related-title" className="kicker border-t-2 border-rule-strong pt-3">
-                    Related analysis
+                    Related
                   </h2>
                   <ul className="mt-5 divide-y divide-rule">
                     {related.map((p) => (
@@ -305,8 +301,8 @@ export default async function ArticlePage({params}: Params) {
       </article>
 
       {(keepReading.length > 0 || related.length > 0) && (
-        <section aria-label="Keep reading" className="shell cv-auto mt-section">
-          <SectionHeading title="Keep reading" className="mb-8" />
+        <section aria-label="More posts" className="shell cv-auto mt-section">
+          <SectionHeading title="More posts" className="mb-8" />
           <ul className="grid gap-x-col gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {(keepReading.length ? keepReading : related.slice(0, 3)).map((p, i) => (
               <Reveal as="li" key={p._id} index={i}>

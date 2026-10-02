@@ -60,7 +60,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     const fixed: Redirect[] = [
       {source: '/feed', destination: '/rss.xml', permanent: true},
-      {source: '/category/all', destination: '/', permanent: true},
+      {source: '/category/all', destination: '/all', permanent: true},
       {source: '/category/:slug', destination: '/:slug', permanent: true},
       {source: '/profile/:slug', destination: '/authors/:slug', permanent: true},
       {source: '/about_us', destination: '/about', permanent: true},

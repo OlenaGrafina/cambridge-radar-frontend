@@ -16,7 +16,7 @@ export function ContactForm() {
       <div role="status" className="border-t border-rule-strong pt-6">
         <p className="t-lead flex items-start gap-3">
           <CheckIcon className="mt-1 shrink-0 text-signal" />
-          {message ?? 'Thank you — your message is with the editors. We reply within two working days.'}
+          {message ?? 'Thank you for your message. It has been sent.'}
         </p>
         <button type="button" className="btn btn-ghost mt-6" onClick={() => setStatus('idle')}>
           Send another message

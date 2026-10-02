@@ -56,7 +56,6 @@ export const postQuery = /* groq */ `*[${published} && slug.current == $slug][0]
     markDefs[]{...}
   },
   tags,
-  allowComments,
   seo{..., image${image}},
   "author": author->{${authorFields}, expertise, shortBio, links},
   "otherSections": otherCategories[]->${sectionRef},
@@ -64,10 +63,7 @@ export const postQuery = /* groq */ `*[${published} && slug.current == $slug][0]
     title, "slug": slug.current,
     "posts": *[${published} && series._ref == ^._id] | order(publishedAt asc){_id, title, "slug": slug.current, "section": category->slug.current}
   },
-  "related": *[${published} && _id != ^._id && (category._ref == ^.category._ref || author._ref == ^.author._ref)] | order(publishedAt desc)[0...6]${postCard},
-  "comments": *[_type == "comment" && post._ref == ^._id && status == "approved"] | order(createdAt asc){
-    _id, name, body, createdAt, "parent": parent._ref, "staffAuthor": staffAuthor->{name, "slug": slug.current}
-  }
+  "related": *[${published} && _id != ^._id && (category._ref == ^.category._ref || author._ref == ^.author._ref)] | order(publishedAt desc)[0...6]${postCard}
 }`
 
 export const latestQuery = /* groq */ `*[${published}] | order(publishedAt desc)[0...$limit]${postCard}`
@@ -81,6 +77,11 @@ export const sectionQuery = /* groq */ `*[_type == "category" && slug.current ==
 export const sectionPostsQuery = /* groq */ `{
   "posts": *[${published} && ${inSection}] | order(publishedAt desc)[$from...$to]${postCard},
   "total": count(*[${published} && ${inSection}])
+}`
+
+export const allPostsQuery = /* groq */ `{
+  "posts": *[${published}] | order(publishedAt desc)[$from...$to]${postCard},
+  "total": count(*[${published}])
 }`
 
 export const sectionSlugsQuery = /* groq */ `*[_type == "category" && defined(slug.current)]{

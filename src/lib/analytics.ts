@@ -11,7 +11,6 @@
  * Event catalogue (GA4 recommended names where one exists):
  *   sign_up          newsletter sign-up            {method: 'newsletter', source}
  *   generate_lead    contact form sent             {form: 'contact'}
- *   comment_submit   comment sent for review       {post_id, reply}
  *   share            share button                  {method, content_type, item_id}
  *   search           search results shown          {search_term, results}
  *   article_read     scroll depth in an article    {percent: 25|50|75|100, article, section, author}

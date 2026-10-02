@@ -44,5 +44,5 @@ export async function POST(req: Request) {
     }
   }
 
-  return json({message: 'Thank you — your message is with the editors. We reply within two working days.'})
+  return json({message: 'Thank you for your message. It has been sent.'})
 }

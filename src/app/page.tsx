@@ -1,5 +1,6 @@
 import type {Metadata} from 'next'
 
+import {FeedSlider} from '@/components/home/FeedSlider'
 import {LeadSlider} from '@/components/home/LeadSlider'
 import {NewsletterBand} from '@/components/home/NewsletterBand'
 import {VoicesStrip} from '@/components/home/VoicesStrip'
@@ -29,12 +30,13 @@ export default async function HomePage() {
   const leadIds = new Set(lead.map((p) => p._id))
   const rest = latest.filter((p) => !leadIds.has(p._id))
 
-  // Left index and right feed never repeat each other.
+  // Left: the latest headlines. Right: the "Daily Feed" slider, as on the
+  // original site — it pages through the newest articles (or the editor's
+  // picks when set) and ends with "View all".
   const index = rest.slice(0, 6)
   const picks = compact(data.home?.picks)
-  const sideTitle = picks.length ? 'Editor’s picks' : 'Daily feed'
-  const feed = rest.slice(6, 11)
-  const side = (picks.length ? picks : feed.length >= 3 ? feed : rest.slice(0, 5)).slice(0, 5)
+  const sideTitle = picks.length ? 'Editor’s picks' : 'Daily Feed'
+  const side = picks.length ? picks : latest.slice(0, 12)
 
   // Section rows: a story appears in one row only — its own section first.
   const used = new Set<string>()
@@ -49,7 +51,7 @@ export default async function HomePage() {
   const bigSections = sections.filter((s) => s.posts.length >= 2)
   const smallSections = sections.filter((s) => s.posts.length === 1)
 
-  const shownIds = new Set([...leadIds, ...index.map((p) => p._id), ...side.map((p) => p._id)])
+  const shownIds = new Set([...leadIds, ...index.map((p) => p._id)])
   const archive = latest.filter((p) => !shownIds.has(p._id)).slice(0, 8)
 
   if (!latest.length) {
@@ -87,20 +89,11 @@ export default async function HomePage() {
           </aside>
 
           <aside
-            aria-labelledby="feed-title"
+            aria-label="Daily Feed"
             className="rise lg:col-span-3 lg:border-l lg:border-rule lg:pl-rule"
             style={{'--i': 2} as React.CSSProperties}
           >
-            <h2 id="feed-title" className="t-h3 border-t-2 border-rule-strong pt-3">
-              {sideTitle}
-            </h2>
-            <ul className="mt-5 divide-y divide-rule">
-              {side.map((post) => (
-                <li key={post._id} className="py-4 first:pt-0">
-                  <StoryRow post={post} compact />
-                </li>
-              ))}
-            </ul>
+            <FeedSlider title={sideTitle} posts={side} perPage={4} />
           </aside>
         </div>
       </section>
@@ -129,17 +122,14 @@ export default async function HomePage() {
 
       {compact(data.authors).length > 0 && (
         <section aria-labelledby="voices" className="shell cv-auto mt-section">
-          <SectionHeading title="Voices" href="/authors" className="mb-2" />
-          <p className="t-body-sm mb-2 max-w-xl text-ink-2" id="voices">
-            Strategists, researchers and practitioners writing for Cambridge Radar.
-          </p>
+          <SectionHeading title="Authors" href="/authors" className="mb-2" />
           <VoicesStrip authors={compact(data.authors)} />
         </section>
       )}
 
       {archive.length > 0 && (
-        <section aria-label="More from the Radar" className="shell cv-auto mt-section">
-          <SectionHeading title="More from the Radar" className="mb-8" />
+        <section aria-label="More posts" className="shell cv-auto mt-section">
+          <SectionHeading title="More posts" className="mb-8" />
           <ul className="grid gap-x-col gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {archive.map((post, i) => (
               <Reveal as="li" key={post._id} index={i % 4}>

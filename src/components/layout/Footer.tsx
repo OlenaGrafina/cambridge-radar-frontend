@@ -17,13 +17,12 @@ export function Footer({settings}: {settings: Settings}) {
       <div className="shell pt-section pb-10">
         <div className="grid-12 gap-y-12">
           <div className="col-span-12 md:col-span-5">
-            <Link href="/" aria-label={`${settings.title} — home`} className="block w-fit max-w-full">
-              <Logo logo={settings.logo} title={settings.title} height={72} />
+            <Link href="/" aria-label={`${settings.title} — home`} className="block w-fit">
+              <Logo logo={settings.logo} title={settings.title} height={56} />
             </Link>
             {settings.tagline && <p className="meta mt-3 !text-ink/60">{settings.tagline}</p>}
             <p className="t-body-sm mt-8 max-w-sm text-ink/75">
-              {settings.footerNote ||
-                'An independent analytical platform. Signals, context and the people shaping what comes next.'}
+              {settings.footerNote || settings.description}
             </p>
           </div>
 

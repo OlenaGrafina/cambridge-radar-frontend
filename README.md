@@ -32,14 +32,14 @@ npm run build && npm start
 |---|---|
 | `/` | Front page: latest index · lead slider · daily feed / editor’s picks, section rows, newsletter, voices, archive |
 | `/<section>` · `/<section>/page/<n>` | Section with pagination |
-| `/<section>/<slug>` | Article: contents (scroll-spy), reading time, share, author, series, related, comments, newsletter |
+| `/<section>/<slug>` | Article: contents (scroll-spy), reading time, share, author, series, related, newsletter |
 | `/<page>` | About, Contribute, Newsletter, Contacts, Privacy policy (same top-level slug space as sections) |
 | `/authors` · `/authors/<slug>` | Authors index and profiles |
 | `/series/<slug>` | Series |
 | `/search?q=` | Full-text search (GROQ) |
 | `/rss.xml` · `/sitemap.xml` · `/robots.txt` | Feeds and crawling |
-| `/api/comments` · `/api/subscribe` · `/api/contact` | Forms (honeypot, rate limit, Turnstile) |
-| `/api/revalidate` | Sanity webhook: cache refresh, newsletter send, reply notifications |
+| `/api/subscribe` · `/api/contact` | Forms (honeypot, rate limit, Turnstile) |
+| `/api/revalidate` | Sanity webhook: cache refresh, newsletter send |
 
 Old WordPress addresses are redirected (301) — fixed rules in `next.config.ts` plus `redirect`
 documents from Sanity.
@@ -67,7 +67,6 @@ Nothing loads until the reader accepts cookies. IDs are set in Sanity → Site s
 |---|---|---|---|
 | `sign_up` | newsletter sign-up | `method: newsletter`, `source` (page/block) | ✅ |
 | `generate_lead` | contact / contribute form sent | `form` | ✅ |
-| `comment_submit` | comment sent for review | `post_id`, `reply` | ✅ |
 | `share` | share buttons, copy link | `method`, `content_type`, `item_id` | |
 | `search` | search results shown | `search_term`, `results` | |
 | `article_read` | 25 / 50 / 75 / 100 % of an article body | `percent`, `article`, `section`, `author` | 100 % optional |

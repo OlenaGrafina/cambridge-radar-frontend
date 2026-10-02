@@ -29,7 +29,6 @@ export default async function AuthorsPage() {
         kicker="Cambridge Radar"
         title="Authors"
         aside={`${pad(authors.length)} voices`}
-        lede="Strategists, researchers and practitioners. Each writes from inside the systems they analyse."
       />
 
       {editorial.length > 0 && (

@@ -55,26 +55,15 @@ export type Author = AuthorRef & {
   seo?: Seo
 }
 
-export type Comment = {
-  _id: string
-  name: string
-  body: string
-  createdAt: string
-  parent?: string
-  staffAuthor?: {name: string; slug: string}
-}
-
 export type Post = PostCard & {
   updatedAt?: string
   body: PortableTextBlock[]
   tags?: string[]
-  allowComments?: boolean
   seo?: Seo
   author: Author
   otherSections?: SectionRef[]
   series?: {title: string; slug: string; posts: {_id: string; title: string; slug: string; section: string}[]}
   related: PostCard[]
-  comments: Comment[]
 }
 
 export type Section = SectionRef & {

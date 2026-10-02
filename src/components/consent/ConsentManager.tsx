@@ -132,18 +132,18 @@ export function ConsentManager({gaId, clarityId, gtmId}: {gaId?: string; clarity
       )}
     >
       <p id="consent-title" className="kicker">
-        Your privacy
+        We value your privacy
       </p>
       <p className="t-body-sm mt-3 text-ink-2">
-        We use analytics cookies to understand which analysis people read, only if you agree. Nothing is
-        tracked until you choose. <Link href="/privacy-policy" className="underline underline-offset-2">Privacy policy</Link>.
+        We use cookies to analyse our traffic. By clicking “Accept All”, you consent to our use of cookies.{' '}
+        <Link href="/privacy-policy" className="underline underline-offset-2">Privacy policy</Link>
       </p>
       <div className="mt-5 grid grid-cols-2 gap-2">
         <button type="button" className="btn btn-ghost" onClick={() => decide(false)}>
-          Essential only
+          Reject All
         </button>
         <button type="button" className="btn btn-ink" onClick={() => decide(true)}>
-          Accept analytics
+          Accept All
         </button>
       </div>
     </div>

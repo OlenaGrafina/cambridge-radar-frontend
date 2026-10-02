@@ -1,7 +1,7 @@
 import {revalidateTag} from 'next/cache'
 
 import {CONTENT_TAG, writeClient} from '@/lib/sanity/client'
-import {emailEnabled, escapeHtml, layout, sendBatch, sendEmail} from '@/lib/server/email'
+import {emailEnabled, escapeHtml, layout, sendBatch} from '@/lib/server/email'
 import {json} from '@/lib/server/guard'
 import {absolute, postPath} from '@/lib/utils'
 
@@ -14,7 +14,6 @@ import {absolute, postPath} from '@/lib/utils'
  *
  * 1. Expires every cached Sanity read, so the next visitor gets fresh pages.
  * 2. A newly published article → newsletter to active subscribers (once).
- * 3. A newly approved reply → email to the reader who asked to be notified.
  */
 
 async function validSignature(req: Request, raw: string, secret: string) {
@@ -76,37 +75,6 @@ async function sendNewsletter(postId: string) {
   return `sent to ${data.subs.length}`
 }
 
-async function notifyReply(commentId: string) {
-  if (!writeClient || !emailEnabled()) return 'email disabled'
-  const c = await writeClient.fetch<{
-    _id: string
-    status: string
-    replyNotifiedAt?: string
-    name: string
-    staff?: string
-    body: string
-    post?: {title: string; slug: string; section?: {slug: string}}
-    parent?: {name: string; email?: string; notifyOnReply?: boolean}
-  } | null>(
-    `*[_id == $id && _type == "comment"][0]{_id, status, replyNotifiedAt, name, "staff": staffAuthor->name, body,
-      "post": post->{title, "slug": slug.current, "section": category->{"slug": slug.current}},
-      "parent": parent->{name, email, notifyOnReply}}`,
-    {id: commentId},
-  )
-  if (!c || c.status !== 'approved' || c.replyNotifiedAt || !c.parent?.notifyOnReply || !c.parent.email || !c.post) return 'skip'
-  await writeClient.patch(c._id).setIfMissing({replyNotifiedAt: new Date().toISOString()}).commit()
-  const url = `${absolute(postPath(c.post))}#comment-${c._id}`
-  await sendEmail({
-    to: c.parent.email,
-    subject: `New reply to your comment on “${c.post.title}”`,
-    html: layout({
-      title: `${c.staff ?? c.name} replied to you`,
-      body: `<blockquote style="margin:16px 0;padding-left:16px;border-left:2px solid #0b0b0c">${escapeHtml(c.body).replace(/\n/g, '<br>')}</blockquote>
-<p><a href="${url}" style="color:#c8361b">Read the discussion →</a></p>`,
-    }),
-  })
-  return 'sent'
-}
 
 export async function POST(req: Request) {
   const secret = process.env.SANITY_REVALIDATE_SECRET
@@ -122,7 +90,6 @@ export async function POST(req: Request) {
   let extra: string | undefined
   try {
     if (body._type === 'post' && id && !body._id?.startsWith('drafts.')) extra = await sendNewsletter(id)
-    if (body._type === 'comment' && id) extra = await notifyReply(id)
   } catch (e) {
     console.error('[revalidate] side effect failed', e)
     extra = 'side effect failed'

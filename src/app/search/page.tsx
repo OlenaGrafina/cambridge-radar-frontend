@@ -50,7 +50,7 @@ export default async function SearchPage({searchParams}: Props) {
             type="search"
             defaultValue={query}
             autoFocus
-            placeholder="Search analysis, people, topics"
+            placeholder="Enter Keywords"
             className="t-h2 w-full min-w-0 bg-transparent outline-none placeholder:text-muted/60"
           />
           <button type="submit" className="btn btn-ink shrink-0">

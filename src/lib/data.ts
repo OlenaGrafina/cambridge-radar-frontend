@@ -4,19 +4,21 @@ import {sanityFetch} from './sanity/client'
 import {homeQuery, latestQuery, settingsQuery} from './sanity/queries'
 import type {AuthorRef, PostCard, Section, Settings} from './sanity/types'
 
+/** Pseudo-section for the archive of every article (/all — the old /category/all/). */
+export const ALL_SECTION: Section = {_id: 'all', title: 'All', slug: 'all'}
+
 const FALLBACK_SETTINGS: Settings = {
   title: 'Cambridge Radar',
   tagline: 'Signals of What’s Next',
-  description:
-    'Cambridge Radar is an independent analytical and editorial platform on leadership, technology, the economy and geopolitics.',
+  description: '',
   mainMenu: [],
   topMenu: [
     {label: 'Authors', href: '/authors'},
     {label: 'About', href: '/about'},
     {label: 'Contacts', href: '/contacts'},
   ],
-  newsletterTitle: 'Get the Radar in your inbox',
-  newsletterText: 'New analysis from Cambridge Radar, straight to your email. No noise.',
+  newsletterTitle: 'Discover more from Cambridge Radar - Signals of What’s Next',
+  newsletterText: 'Subscribe to get the latest posts sent to your email.',
 }
 
 /** Site settings, deduplicated per request and cached across requests. */

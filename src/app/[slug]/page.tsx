@@ -36,7 +36,7 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
     const s = found.section
     return buildMetadata({
       title: s.title,
-      description: s.description || `${s.title}: analysis and commentary from Cambridge Radar.`,
+      description: s.description,
       path: `/${s.slug}`,
       seo: s.seo,
     })

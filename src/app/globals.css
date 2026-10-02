@@ -230,7 +230,8 @@
     filter: var(--logo-filter);
     mix-blend-mode: var(--logo-blend);
     width: var(--w-sm);
-    max-width: 100%;
+    /* Not a % of the parent: logo links are shrink-to-fit, where % is cyclic. */
+    max-width: calc(100vw - 2 * var(--gutter));
     height: auto;
   }
   @media (min-width: 48rem) {
