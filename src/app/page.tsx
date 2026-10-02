@@ -9,8 +9,9 @@ import {SectionHeading} from '@/components/story/SectionHeading'
 import {StoryCard, StoryFeature, StoryIndex, StoryRow} from '@/components/story/Story'
 import {compact, getHome, getSettings} from '@/lib/data'
 import {buildMetadata} from '@/lib/seo'
+import {Share} from '@/components/article/Share'
 import type {PostCard, Section} from '@/lib/sanity/types'
-import {cn, pad} from '@/lib/utils'
+import {cn, SITE_URL} from '@/lib/utils'
 
 export async function generateMetadata(): Promise<Metadata> {
   const [s, data] = await Promise.all([getSettings(), getHome()])
@@ -33,9 +34,9 @@ export default async function HomePage() {
   // Left: the latest headlines. Right: the "Daily Feed" slider, as on the
   // original site — it pages through the newest articles (or the editor's
   // picks when set) and ends with "View all".
-  const index = rest.slice(0, 6)
+  const index = latest.slice(0, 10)
   const picks = compact(data.home?.picks)
-  const sideTitle = picks.length ? 'Editor’s picks' : 'Daily Feed'
+  const sideTitle = 'Daily Feed'
   const side = picks.length ? picks : latest.slice(0, 12)
 
   // Section rows: a story appears in one row only — its own section first.
@@ -51,8 +52,8 @@ export default async function HomePage() {
   const bigSections = sections.filter((s) => s.posts.length >= 2)
   const smallSections = sections.filter((s) => s.posts.length === 1)
 
-  const shownIds = new Set([...leadIds, ...index.map((p) => p._id)])
-  const archive = latest.filter((p) => !shownIds.has(p._id)).slice(0, 8)
+  // "Featured Stories" on the original: the six newest articles in three columns.
+  const featured = latest.slice(0, 6)
 
   if (!latest.length) {
     return (
@@ -93,7 +94,7 @@ export default async function HomePage() {
             className="rise lg:col-span-3 lg:border-l lg:border-rule lg:pl-rule"
             style={{'--i': 2} as React.CSSProperties}
           >
-            <FeedSlider title={sideTitle} posts={side} perPage={4} />
+            <FeedSlider title={sideTitle} posts={side} perPage={4} autoplayMs={5000} viewAllLabel="View More posts" />
           </aside>
         </div>
       </section>
@@ -127,18 +128,25 @@ export default async function HomePage() {
         </section>
       )}
 
-      {archive.length > 0 && (
-        <section aria-label="More posts" className="shell cv-auto mt-section">
-          <SectionHeading title="More posts" className="mb-8" />
-          <ul className="grid gap-x-col gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-            {archive.map((post, i) => (
-              <Reveal as="li" key={post._id} index={i % 4}>
-                <StoryCard post={post} />
+      {featured.length > 0 && (
+        <section aria-label="Featured Stories" className="shell cv-auto mt-section">
+          <SectionHeading title="Featured Stories" className="mb-8" />
+          <ul className="grid gap-x-col gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((post, i) => (
+              <Reveal as="li" key={post._id} index={i % 3}>
+                <StoryCard post={post} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" />
               </Reveal>
             ))}
           </ul>
         </section>
       )}
+
+      <div className="shell mt-section">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-y border-rule py-4">
+          <p className="kicker">Share this:</p>
+          <Share url={SITE_URL} title={settings.title} />
+        </div>
+      </div>
     </>
   )
 }

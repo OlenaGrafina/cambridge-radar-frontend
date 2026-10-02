@@ -47,6 +47,11 @@ export type PostCard = {
 }
 
 export type Author = AuthorRef & {
+  subtitle?: string
+  country?: string
+  industry?: string
+  skills?: string[]
+  profileCategories?: string[]
   expertise?: string
   shortBio?: string
   bio?: PortableTextBlock[]
@@ -64,18 +69,22 @@ export type Post = PostCard & {
   otherSections?: SectionRef[]
   series?: {title: string; slug: string; posts: {_id: string; title: string; slug: string; section: string}[]}
   related: PostCard[]
+  prev?: {title: string; slug: string; section?: {slug: string}} | null
+  next?: {title: string; slug: string; section?: {slug: string}} | null
 }
 
 export type Section = SectionRef & {
   description?: string
   seo?: Seo
+  /** Breadcrumb label when it differs from the title (tag archives). */
+  crumb?: string
 }
 
 export type Page = {
   _id: string
   title: string
   slug: string
-  template?: 'default' | 'contact' | 'newsletter'
+  template?: 'default' | 'contact' | 'contribute' | 'newsletter'
   lede?: string
   image?: SanityImage
   body?: PortableTextBlock[]

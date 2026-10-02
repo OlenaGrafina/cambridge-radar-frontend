@@ -2,6 +2,8 @@ import type {Metadata, Viewport} from 'next'
 import {Geist, Geist_Mono, Newsreader} from 'next/font/google'
 
 import {GlobalTracker} from '@/components/analytics/GlobalTracker'
+import {FloatingControls} from '@/components/layout/FloatingControls'
+import {SearchOverlay} from '@/components/layout/SearchOverlay'
 import {ConsentManager} from '@/components/consent/ConsentManager'
 import {RevealObserver} from '@/components/motion/RevealObserver'
 import {Footer} from '@/components/layout/Footer'
@@ -115,6 +117,8 @@ export default async function RootLayout({children}: {children: React.ReactNode}
         <Footer settings={settings} />
         <ConsentManager gaId={settings.gaId} clarityId={settings.clarityId} gtmId={settings.gtmId} />
         <GlobalTracker />
+        <SearchOverlay />
+        <FloatingControls newsletterTitle={settings.newsletterTitle} newsletterText={settings.newsletterText} />
         <RevealObserver />
         <JsonLd
           data={[

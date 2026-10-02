@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({params}: Params): Promise<Metadata> {
   const {n} = await params
-  return buildMetadata({title: `All articles — page ${n}`, path: `/all/page/${n}`})
+  return buildMetadata({title: `All Archives — page ${n}`, path: `/all/page/${n}`})
 }
 
 export default async function AllPaged({params}: Params) {

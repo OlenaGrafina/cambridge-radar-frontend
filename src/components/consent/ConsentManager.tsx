@@ -127,7 +127,7 @@ export function ConsentManager({gaId, clarityId, gtmId}: {gaId?: string; clarity
       aria-modal="false"
       aria-labelledby="consent-title"
       className={cn(
-        'fixed inset-x-3 bottom-3 z-50 border border-rule-strong bg-paper p-5 text-ink md:inset-x-auto md:right-6 md:bottom-6 md:max-w-md md:p-6',
+        'fixed inset-x-3 bottom-3 z-50 border border-rule-strong bg-paper p-5 text-ink md:inset-x-auto md:left-6 md:bottom-6 md:max-w-md md:p-6',
         'motion-safe:animate-[rise_520ms_var(--ease-out-quart)_both]',
       )}
     >

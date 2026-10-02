@@ -1,7 +1,7 @@
 import {cache} from 'react'
 
 import {sanityFetch} from './sanity/client'
-import {homeQuery, latestQuery, settingsQuery} from './sanity/queries'
+import {dailyFeedQuery, homeQuery, latestQuery, settingsQuery} from './sanity/queries'
 import type {AuthorRef, PostCard, Section, Settings} from './sanity/types'
 
 /** Pseudo-section for the archive of every article (/all — the old /category/all/). */
@@ -44,6 +44,12 @@ export type HomeData = {
 export const getHome = cache(() => sanityFetch<HomeData>(homeQuery))
 
 export const getLatest = cache((limit = 6) => sanityFetch<PostCard[]>(latestQuery, {limit}))
+
+/** The "Daily Feed" slider: the editor's hand-picked list, or the newest articles. */
+export const getDailyFeed = cache(async () => {
+  const picks = (await sanityFetch<(PostCard | null)[]>(dailyFeedQuery)).filter((p): p is PostCard => Boolean(p))
+  return picks.length ? picks : getLatest(8)
+})
 
 /** Drop references to unpublished/deleted docs that GROQ returns as null. */
 export const compact = <T,>(list: (T | null | undefined)[] | null | undefined): T[] =>

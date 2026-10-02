@@ -3,7 +3,12 @@ import type {NextConfig} from 'next'
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'polcbwiw'
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
-type Redirect = {source: string; destination: string; permanent: boolean}
+type Redirect = {
+  source: string
+  destination: string
+  permanent: boolean
+  has?: {type: 'query'; key: string; value?: string}[]
+}
 
 /** Strip the trailing slash: Next normalises /path/ → /path before matching. */
 const clean = (path: string) => (path.length > 1 ? path.replace(/\/+$/, '') : path)
@@ -67,11 +72,21 @@ const nextConfig: NextConfig = {
       {source: '/home', destination: '/', permanent: true},
       {source: '/artificial-intelligence', destination: '/ai', permanent: true},
       {source: '/analysis-cambridge-radar', destination: '/analysis', permanent: true},
+      // WordPress archive URLs: paged categories, search aliases, date archives
+      {source: '/category/:slug/page/:n', destination: '/:slug/page/:n', permanent: true},
+      {source: '/page/:n', has: [{type: 'query', key: 's', value: '(?<s>.*)'}], destination: '/search?q=:s&page=:n', permanent: true},
+      {source: '/search/:q/page/:n', destination: '/search?q=:q&page=:n', permanent: true},
+      {source: '/search/:q', destination: '/search?q=:q', permanent: true},
+      {source: '/:y(\\d{4})/:m(\\d{2})/:d(\\d{2})', destination: '/all', permanent: true},
+      {source: '/:y(\\d{4})/:m(\\d{2})', destination: '/all', permanent: true},
+      {source: '/:y(\\d{4})', destination: '/all', permanent: true},
     ]
     const fromSanity = await sanityRedirects()
     const seen = new Set(fixed.map((r) => r.source))
     const rules = [...fixed, ...fromSanity.filter((r) => !seen.has(r.source) && seen.add(r.source))]
     return [
+      // WordPress search: /?s=term
+      {source: '/', has: [{type: 'query', key: 's', value: '(?<s>.*)'}], destination: '/search?q=:s', permanent: true},
       ...rules.flatMap((r) => [r, {...r, source: `${r.source}/`}]),
       {source: '/:path+/', destination: '/:path+', permanent: true},
     ]

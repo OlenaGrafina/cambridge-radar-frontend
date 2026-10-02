@@ -1,11 +1,12 @@
 import Link from 'next/link'
 
-import {NETWORK_LABEL, SearchIcon, SocialIcon} from '@/components/icons'
+import {NETWORK_LABEL, SocialIcon} from '@/components/icons'
 import type {Settings} from '@/lib/sanity/types'
 
 import {Logo} from './Logo'
 import {MobileMenu} from './MobileMenu'
 import {NavBar} from './NavBar'
+import {SearchButton} from './SearchOverlay'
 import {Today} from './Today'
 import {ThemeToggle} from './ThemeToggle'
 
@@ -48,9 +49,7 @@ export function Header({settings}: {settings: Settings}) {
               ))}
             </ul>
           )}
-          <Link href="/search" className="icon-btn" aria-label="Search">
-            <SearchIcon />
-          </Link>
+          <SearchButton />
           <ThemeToggle />
         </nav>
       </div>
@@ -61,9 +60,7 @@ export function Header({settings}: {settings: Settings}) {
         <Link href="/" className="masthead-logo mx-auto block w-fit" aria-label={`${settings.title} — home`}>
           <Logo logo={settings.logo} title={settings.title} height={104} mobileHeight={44} priority />
         </Link>
-        <Link href="/search" className="icon-btn md:hidden" aria-label="Search">
-          <SearchIcon />
-        </Link>
+        <SearchButton className="md:hidden" />
         {settings.tagline && (
           <p className="meta mt-3 hidden text-center md:block">{settings.tagline}</p>
         )}

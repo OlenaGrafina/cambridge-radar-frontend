@@ -1,16 +1,17 @@
-import Link from 'next/link'
-
-import {ArrowLeft, ArrowRight} from '@/components/icons'
 import {PageHeader} from '@/components/layout/PageHeader'
+import {Pagination} from '@/components/layout/Pagination'
 import {JsonLd} from '@/components/seo/JsonLd'
 import {Reveal} from '@/components/motion/Reveal'
-import {StoryCard, StoryWide} from '@/components/story/Story'
+import {FeedSlider} from '@/components/home/FeedSlider'
+import {LatestArticles} from '@/components/sidebar/LatestArticles'
+import {StoryCard, StoryFeature} from '@/components/story/Story'
+import {getDailyFeed} from '@/lib/data'
 import type {PostCard, Section} from '@/lib/sanity/types'
-import {absolute, cn, pad, postPath} from '@/lib/utils'
+import {absolute, cn, postPath} from '@/lib/utils'
 
 export const PAGE_SIZE = 9
 
-export function SectionView({
+export async function SectionView({
   section,
   posts,
   page,
@@ -21,6 +22,7 @@ export function SectionView({
   page: number
   total: number
 }) {
+  const feed = await getDailyFeed()
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE))
   const [first, ...rest] = posts
   const base = `/${section.slug}`
@@ -54,7 +56,7 @@ export function SectionView({
         ]}
       />
       <PageHeader
-        crumbs={[{label: 'Cambridge Radar', href: '/'}, {label: 'Section'}]}
+        crumbs={[{label: 'Home', href: '/'}, {label: section.crumb ?? section.title}]}
         title={section.title}
         lede={section.description}
         aside={
@@ -65,58 +67,34 @@ export function SectionView({
         }
       />
 
-      {!first && <p className="t-lead py-section text-muted">No articles in this section yet.</p>}
+      {/* Section posts (left) · Latest Articles and Daily Feed (right), as on the original section pages. */}
+      <div className="grid-12 gap-y-section">
+        <div className="col-span-12 lg:col-span-8">
+          {!first && <p className="t-lead py-section text-muted">No posts found</p>}
 
-      {first && page === 1 && (
-        <div className="rise" style={{'--i': 1} as React.CSSProperties}>
-          <StoryWide post={first} priority />
+          {first && page === 1 && (
+            <div className="rise" style={{'--i': 1} as React.CSSProperties}>
+              <StoryFeature post={first} priority sizes="(min-width: 1024px) 62vw, 100vw" />
+            </div>
+          )}
+
+          {(page === 1 ? rest : posts).length > 0 && (
+            <ul className={cn('grid gap-x-col gap-y-14 sm:grid-cols-2', page === 1 ? 'mt-block border-t border-rule pt-block' : '')}>
+              {(page === 1 ? rest : posts).map((post, i) => (
+                <Reveal as="li" key={post._id} index={i % 2}>
+                  <StoryCard post={post} showExcerpt sizes="(min-width: 1024px) 30vw, (min-width: 640px) 50vw, 100vw" />
+                </Reveal>
+              ))}
+            </ul>
+          )}
+
+          <Pagination page={page} pages={pages} href={href} />
         </div>
-      )}
-
-      {(page === 1 ? rest : posts).length > 0 && (
-        <ul className={cn('grid gap-x-col gap-y-14 sm:grid-cols-2 lg:grid-cols-3', page === 1 ? 'mt-block border-t border-rule pt-block' : '')}>
-          {(page === 1 ? rest : posts).map((post, i) => (
-            <Reveal as="li" key={post._id} index={i % 3}>
-              <StoryCard post={post} showExcerpt sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" />
-            </Reveal>
-          ))}
-        </ul>
-      )}
-
-      {pages > 1 && (
-        <nav aria-label="Pagination" className="mt-section flex items-center justify-between border-t border-rule-strong pt-5">
-          {page > 1 ? (
-            <Link href={href(page - 1)} className="btn btn-ghost" rel="prev">
-              <ArrowLeft size={16} /> Newer
-            </Link>
-          ) : (
-            <span />
-          )}
-          <ol className="flex gap-1">
-            {Array.from({length: pages}, (_, i) => i + 1).map((n) => (
-              <li key={n}>
-                <Link
-                  href={href(n)}
-                  aria-current={n === page ? 'page' : undefined}
-                  className={cn(
-                    'meta grid h-10 w-10 place-items-center tabular',
-                    n === page ? 'bg-ink !text-paper' : 'hover:text-ink',
-                  )}
-                >
-                  {n}
-                </Link>
-              </li>
-            ))}
-          </ol>
-          {page < pages ? (
-            <Link href={href(page + 1)} className="btn btn-ghost" rel="next">
-              Older <ArrowRight size={16} />
-            </Link>
-          ) : (
-            <span />
-          )}
-        </nav>
-      )}
+        <aside aria-label="Latest Articles and Daily Feed" className="col-span-12 space-y-12 lg:col-span-4 lg:border-l lg:border-rule lg:pl-rule">
+          <LatestArticles />
+          <FeedSlider title="Daily Feed" posts={feed} perPage={4} autoplayMs={5000} viewAllLabel="View More posts" />
+        </aside>
+      </div>
     </div>
   )
 }

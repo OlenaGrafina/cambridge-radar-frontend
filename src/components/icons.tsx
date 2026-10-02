@@ -92,6 +92,20 @@ export const MailIcon = (p: IconProps) => (
   </Icon>
 )
 
+export const PinIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" />
+    <circle cx="12" cy="10" r="2.3" />
+  </Icon>
+)
+
+export const UsersIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="9" cy="8.5" r="3.2" />
+    <path d="M3.5 19c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.6c1.6.7 2.6 2.2 3 4.4" />
+  </Icon>
+)
+
 export const RssIcon = (p: IconProps) => (
   <Icon {...p}>
     <path d="M5 4.5a14.5 14.5 0 0 1 14.5 14.5M5 10.5A8.5 8.5 0 0 1 13.5 19" />

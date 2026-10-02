@@ -4,11 +4,11 @@ import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 import {useEffect, useRef, useState} from 'react'
 
-import {SearchIcon} from '@/components/icons'
 import type {MenuItem, SanityImage} from '@/lib/sanity/types'
 import {cn} from '@/lib/utils'
 
 import {Logo} from './Logo'
+import {SearchButton} from './SearchOverlay'
 import {ThemeToggle} from './ThemeToggle'
 
 /**
@@ -58,7 +58,7 @@ export function NavBar({sections, title, logo}: {sections: MenuItem[]; title: st
 
             <nav aria-label="Sections" className="no-scrollbar -mx-4 flex-1 overflow-x-auto px-4 [mask-image:linear-gradient(to_right,black_85%,transparent)] md:mx-0 md:px-0 md:[mask-image:none]">
               <ul className={cn('flex items-center gap-6 whitespace-nowrap md:gap-7', stuck ? 'md:justify-end' : 'md:justify-center')}>
-                {sections.map((item) => {
+                {[{_type: 'page' as const, title: 'Home', slug: ''}, ...sections].map((item) => {
                   const isActive = active === item.slug
                   return (
                     <li key={item.slug}>
@@ -87,9 +87,7 @@ export function NavBar({sections, title, logo}: {sections: MenuItem[]; title: st
               )}
               aria-hidden={!stuck}
             >
-              <Link href="/search" className="icon-btn" aria-label="Search" tabIndex={stuck ? 0 : -1}>
-                <SearchIcon />
-              </Link>
+              <SearchButton />
               <ThemeToggle />
             </div>
           </div>

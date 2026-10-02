@@ -1,39 +1,28 @@
-import Link from 'next/link'
+import type {Metadata} from 'next'
 
-import {StoryIndex} from '@/components/story/Story'
-import {getLatest} from '@/lib/data'
+import {SearchIcon} from '@/components/icons'
 
-export default async function NotFound() {
-  const latest = await getLatest(5).catch(() => [])
+export const metadata: Metadata = {title: 'Page not found', robots: {index: false, follow: true}}
+
+/** The original 404: big "404", the apology line and a search field. */
+export default function NotFound() {
   return (
-    <div className="shell grid-12 gap-y-14 pt-page pb-section">
-      <div className="col-span-12 md:col-span-7">
-        <p className="meta">Error 404 · Signal lost</p>
-        <h1 className="t-display mt-6">This page is off the radar.</h1>
-        <p className="t-lead mt-6 max-w-lg text-ink-2">
-          The address may have changed when we moved to the new site. Try search, or start from the front page.
-        </p>
-        <div className="mt-10 flex flex-wrap gap-3">
-          <Link href="/" className="btn btn-ink">
-            Front page
-          </Link>
-          <Link href="/search" className="btn btn-ghost">
+    <div className="shell grid-12 pt-section pb-section">
+      <div className="col-span-12 md:col-span-8 md:col-start-3 lg:col-span-6 lg:col-start-4">
+        <h1 className="rise font-serif text-[clamp(7rem,22vw,15rem)] leading-[0.85] tracking-[-0.04em]">404</h1>
+        <h2 className="t-h3 rise mt-8 text-ink-2" style={{'--i': 1} as React.CSSProperties}>
+          We&rsquo;re sorry, but the page you were looking for doesn&rsquo;t exist.
+        </h2>
+        <form action="/search" role="search" className="rise mt-10 flex items-center gap-3 border-b-2 border-rule-strong pb-2" style={{'--i': 2} as React.CSSProperties}>
+          <label htmlFor="nf-q" className="sr-only">
             Search
-          </Link>
-        </div>
+          </label>
+          <input id="nf-q" name="q" type="search" placeholder="Search..." className="t-h4 w-full min-w-0 bg-transparent py-2 outline-none placeholder:text-muted/70" />
+          <button type="submit" className="icon-btn shrink-0" aria-label="Search">
+            <SearchIcon size={20} />
+          </button>
+        </form>
       </div>
-      {latest.length > 0 && (
-        <aside className="col-span-12 md:col-span-4 md:col-start-9">
-          <p className="kicker border-t-2 border-rule-strong pt-3">Latest</p>
-          <ol className="mt-5 divide-y divide-rule">
-            {latest.map((post, i) => (
-              <li key={post._id} className="py-4 first:pt-0">
-                <StoryIndex post={post} index={i + 1} />
-              </li>
-            ))}
-          </ol>
-        </aside>
-      )}
     </div>
   )
 }

@@ -6,7 +6,10 @@ import {ArticleTracker} from '@/components/analytics/ArticleTracker'
 import {AuthorCard} from '@/components/article/AuthorCard'
 import {Body, headingIds, withoutRepeatedDek} from '@/components/article/Body'
 import {ReadingProgress} from '@/components/article/ReadingProgress'
+import {PrevNext} from '@/components/article/PostNav'
 import {Share} from '@/components/article/Share'
+import {Lightbox} from '@/components/media/Lightbox'
+import {LatestArticles} from '@/components/sidebar/LatestArticles'
 import {Toc, TocDisclosure} from '@/components/article/Toc'
 import {NewsletterForm} from '@/components/forms/NewsletterForm'
 import {SanityImg} from '@/components/media/SanityImg'
@@ -20,7 +23,7 @@ import {imageUrl} from '@/lib/sanity/image'
 import {postPathsQuery, postQuery} from '@/lib/sanity/queries'
 import type {Post} from '@/lib/sanity/types'
 import {buildMetadata} from '@/lib/seo'
-import {absolute, formatDate, initials, pad, postPath, readingTime, SITE_URL} from '@/lib/utils'
+import {absolute, formatDate, initials, pad, postPath, readingTime, SITE_URL, slugify} from '@/lib/utils'
 
 type Params = {params: Promise<{slug: string; article: string}>}
 
@@ -68,7 +71,7 @@ export default async function ArticlePage({params}: Params) {
 
   // Sidebar: more from the same section or author. Bottom: the newest of
   // everything else, so the two lists never repeat each other.
-  const related = compact(post.related).slice(0, 4)
+  const related = compact(post.related).slice(0, 3)
   const shown = new Set([post._id, ...related.map((p) => p._id)])
   const keepReading = compact(latest).filter((p) => !shown.has(p._id)).slice(0, 3)
 
@@ -195,7 +198,9 @@ export default async function ArticlePage({params}: Params) {
         {/* Lead image: full container width */}
         {post.mainImage?.asset && (
           <figure className="rise mt-block" style={{'--i': 4} as React.CSSProperties}>
-            <SanityImg image={post.mainImage} ratio={2 / 1} priority sizes="(min-width: 1320px) 1256px, 100vw" />
+            <Lightbox src={imageUrl(post.mainImage, 2000)} alt={post.mainImage.alt ?? post.title}>
+              <SanityImg image={post.mainImage} ratio={2 / 1} priority sizes="(min-width: 1320px) 1256px, 100vw" />
+            </Lightbox>
             {(post.mainImage.caption || post.mainImage.credit) && (
               <figcaption className="t-ui-sm mt-3 grid-12 gap-y-1 text-muted">
                 {post.mainImage.caption && <span className="col-span-12 line-clamp-3 lg:col-span-8">{post.mainImage.caption}</span>}
@@ -223,7 +228,7 @@ export default async function ArticlePage({params}: Params) {
                 {post.tags.map((tag) => (
                   <li key={tag}>
                     <Link
-                      href={`/search?q=${encodeURIComponent(tag)}`}
+                      href={`/tag/${slugify(tag)}`}
                       className="meta inline-block border border-rule px-2.5 py-1.5 transition-colors hover:border-rule-strong hover:text-ink"
                     >
                       {tag}
@@ -237,6 +242,29 @@ export default async function ArticlePage({params}: Params) {
               <p className="kicker">Share this:</p>
               <Share url={url} title={post.title} image={imageUrl(post.mainImage, 1000)} />
             </div>
+
+            {related.length > 0 && (
+              <section aria-labelledby="related-title" className="mt-block">
+                <h2 id="related-title" className="kicker border-t-2 border-rule-strong pt-3">
+                  Related
+                </h2>
+                <ul className="mt-5 grid gap-x-col gap-y-8 sm:grid-cols-3">
+                  {related.slice(0, 3).map((p) => (
+                    <li key={p._id}>
+                      <StoryCard post={p} sizes="(min-width: 1024px) 15vw, (min-width: 640px) 33vw, 100vw" />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <PrevNext
+              className="mt-block"
+              prevLabel="Previous Post"
+              nextLabel="Next Post"
+              prev={post.prev ? {title: post.prev.title, href: postPath({slug: post.prev.slug, section: post.prev.section})} : null}
+              next={post.next ? {title: post.next.title, href: postPath({slug: post.next.slug, section: post.next.section})} : null}
+            />
 
             {post.series && compact(post.series.posts).length > 1 && (
               <nav aria-label="Series" className="mt-block bg-paper-2 p-6 md:p-8">
@@ -278,23 +306,12 @@ export default async function ArticlePage({params}: Params) {
 
           </div>
 
-          <aside aria-label="Contents and related" className="hidden lg:col-span-4 lg:col-start-9 lg:block">
-            <div className="sticky top-24 space-y-12">
-              <Toc items={toc} />
-              {related.length > 0 && (
-                <section aria-labelledby="related-title">
-                  <h2 id="related-title" className="kicker border-t-2 border-rule-strong pt-3">
-                    Related
-                  </h2>
-                  <ul className="mt-5 divide-y divide-rule">
-                    {related.map((p) => (
-                      <li key={p._id} className="py-4 first:pt-0">
-                        <StoryRow post={p} compact />
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              )}
+          <aside aria-label="Contents and latest articles" className="col-span-12 mt-section lg:col-span-4 lg:col-start-9 lg:mt-0">
+            <div className="space-y-12">
+              <div className="hidden lg:block">
+                <Toc items={toc} />
+              </div>
+              <LatestArticles exclude={post._id} />
             </div>
           </aside>
         </div>

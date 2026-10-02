@@ -63,8 +63,16 @@ export const postQuery = /* groq */ `*[${published} && slug.current == $slug][0]
     title, "slug": slug.current,
     "posts": *[${published} && series._ref == ^._id] | order(publishedAt asc){_id, title, "slug": slug.current, "section": category->slug.current}
   },
-  "related": *[${published} && _id != ^._id && (category._ref == ^.category._ref || author._ref == ^.author._ref)] | order(publishedAt desc)[0...6]${postCard}
+  "related": *[${published} && _id != ^._id && (category._ref == ^.category._ref || author._ref == ^.author._ref)] | order(publishedAt desc)[0...6]${postCard},
+  "prev": *[${published} && publishedAt < ^.publishedAt] | order(publishedAt desc)[0]{title, "slug": slug.current, "section": category->{"slug": slug.current}},
+  "next": *[${published} && publishedAt > ^.publishedAt] | order(publishedAt asc)[0]{title, "slug": slug.current, "section": category->{"slug": slug.current}}
 }`
+
+export const tagPostsQuery = /* groq */ `*[${published} && $tagName in tags] | order(publishedAt desc)${postCard}`
+
+export const tagListQuery = /* groq */ `array::unique(*[${published} && defined(tags)].tags[])`
+
+export const dailyFeedQuery = /* groq */ `coalesce(*[_id == "homePage"][0].editorsPicks[]->${postCard}, [])`
 
 export const latestQuery = /* groq */ `*[${published}] | order(publishedAt desc)[0...$limit]${postCard}`
 
@@ -98,13 +106,16 @@ export const pageQuery = /* groq */ `*[_type == "page" && slug.current == $slug]
 export const pageSlugsQuery = /* groq */ `*[_type == "page" && defined(slug.current)].slug.current`
 
 export const authorsQuery = /* groq */ `*[_type == "author" && defined(slug.current)] | order(isEditorial desc, coalesce(order, 99) asc, name asc){
-  ${authorFields}, expertise, shortBio, isEditorial,
+  ${authorFields}, subtitle, expertise, shortBio, isEditorial, links, profileCategories,
   "count": count(*[${published} && author._ref == ^._id])
 }`
 
 export const authorQuery = /* groq */ `*[_type == "author" && slug.current == $slug][0]{
-  ${authorFields}, expertise, shortBio, bio, links, isEditorial, seo,
-  "posts": *[${published} && author._ref == ^._id] | order(publishedAt desc)${postCard}
+  ${authorFields}, subtitle, expertise, shortBio, bio, links, isEditorial, seo,
+  country, industry, skills, profileCategories,
+  "posts": *[${published} && author._ref == ^._id] | order(publishedAt desc)${postCard},
+  "prevProfile": *[_type == "author" && defined(slug.current) && coalesce(order, 99) > coalesce(^.order, 99)] | order(coalesce(order, 99) asc)[0]{name, "slug": slug.current},
+  "nextProfile": *[_type == "author" && defined(slug.current) && coalesce(order, 99) < coalesce(^.order, 99)] | order(coalesce(order, 99) desc)[0]{name, "slug": slug.current}
 }`
 
 export const authorSlugsQuery = /* groq */ `*[_type == "author" && defined(slug.current)].slug.current`
@@ -117,8 +128,18 @@ export const seriesQuery = /* groq */ `*[_type == "series" && slug.current == $s
 export const seriesSlugsQuery = /* groq */ `*[_type == "series" && defined(slug.current)].slug.current`
 
 export const searchQuery = /* groq */ `*[${published} && [title, excerpt, pt::text(body), author->name, array::join(tags, " ")] match $q]
-  | score(title match $q, excerpt match $q, boost(array::join(tags, " ") match $q, 2), author->name match $q)
+  | score(boost(title match $q, 3), boost(excerpt match $q, 2), tags match $q, pt::text(body) match $q)
   | order(_score desc, publishedAt desc)[0...30]${postCard}`
+
+/** Pages, sections and profiles for search — the original results mixed all three with posts. */
+export const searchOtherQuery = /* groq */ `{
+  "pages": *[_type == "page" && defined(slug.current) && [title, lede, pt::text(body)] match $q]
+    | score(title match $q) | order(_score desc)[0...10]{_id, title, "slug": slug.current, "text": lede},
+  "sections": *[_type == "category" && defined(slug.current) && [title, description] match $q]
+    | score(title match $q) | order(_score desc)[0...10]{_id, title, "slug": slug.current, "text": description},
+  "authors": *[_type == "author" && defined(slug.current) && [name, role, subtitle, shortBio, array::join(skills, " ")] match $q]
+    | score(name match $q) | order(_score desc)[0...10]{_id, "title": name, "slug": slug.current, "text": shortBio, photo}
+}`
 
 export const sitemapQuery = /* groq */ `{
   "posts": *[${published}]{"slug": slug.current, "section": category->slug.current, "updated": coalesce(updatedAt, _updatedAt), "noIndex": seo.noIndex},

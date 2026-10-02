@@ -14,7 +14,8 @@ export function Footer({settings}: {settings: Settings}) {
 
   return (
     <footer className="surface-dark cv-auto mt-section bg-paper text-ink [contain-intrinsic-size:auto_640px]">
-      <div className="shell pt-section pb-10">
+      {/* pb-24 keeps the floating Subscribe / accessibility buttons clear of the credit line */}
+      <div className="shell pt-section pb-24">
         <div className="grid-12 gap-y-12">
           <div className="col-span-12 md:col-span-5">
             <Link href="/" aria-label={`${settings.title} — home`} className="block w-fit">
@@ -43,11 +44,13 @@ export function Footer({settings}: {settings: Settings}) {
             <p className="meta !text-ink/50">Radar</p>
             <ul className="mt-4 space-y-2.5">
               {[
-                {label: 'About us', href: '/about'},
+                {label: 'Home', href: '/'},
                 {label: 'Authors', href: '/authors'},
+                {label: 'About Us', href: '/about'},
+                {label: 'Contacts', href: '/contacts'},
                 {label: 'Contribute', href: '/contribute'},
                 {label: 'Newsletter', href: '/newsletter'},
-                {label: 'Contacts', href: '/contacts'},
+                {label: 'Privacy Policy', href: '/privacy-policy'},
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="t-ui hover-line text-ink/85 hover:text-ink">
@@ -97,7 +100,7 @@ export function Footer({settings}: {settings: Settings}) {
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             <li>
               <Link href="/privacy-policy" className="meta !text-ink/60 hover:!text-ink">
-                Privacy policy
+                Privacy Policy
               </Link>
             </li>
             <li>

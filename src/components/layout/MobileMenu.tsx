@@ -57,7 +57,7 @@ export function MobileMenu({settings}: {settings: Settings}) {
           </div>
           <nav aria-label="Sections" className="border-t border-rule-strong">
             <ul>
-              {sections.map((item, i) => (
+              {[{title: 'Home', slug: ''}, ...sections].map((item) => (
                 <li key={item.slug} className="border-b border-rule">
                   <Link href={`/${item.slug}`} className="t-h3 block py-3.5">
                     {item.title}

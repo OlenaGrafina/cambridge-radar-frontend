@@ -1,6 +1,8 @@
 import {PortableText, type PortableTextBlock, type PortableTextComponents, toPlainText} from '@portabletext/react'
 
+import {Lightbox} from '@/components/media/Lightbox'
 import {SanityImg} from '@/components/media/SanityImg'
+import {imageUrl} from '@/lib/sanity/image'
 import type {SanityImage} from '@/lib/sanity/types'
 import {cn, slugify} from '@/lib/utils'
 
@@ -139,14 +141,20 @@ export function Body({
         if (portrait) {
           return (
             <figure className="my-10 grid grid-cols-12 items-end gap-x-6 gap-y-3">
-              <SanityImg image={img} ratio={4 / 5} sizes="(min-width: 640px) 18rem, 60vw" className="col-span-7 sm:col-span-5" />
+              <div className="col-span-7 sm:col-span-5">
+                <Lightbox src={imageUrl(img, 2000)} alt={img.alt}>
+                  <SanityImg image={img} ratio={4 / 5} sizes="(min-width: 640px) 18rem, 60vw" />
+                </Lightbox>
+              </div>
               <div className="col-span-12 sm:col-span-7">{caption}</div>
             </figure>
           )
         }
         return (
           <figure className="my-10">
-            <SanityImg image={img} sizes="(min-width: 1280px) 720px, (min-width: 1024px) 62vw, 100vw" />
+            <Lightbox src={imageUrl(img, 2000)} alt={img.alt}>
+              <SanityImg image={img} sizes="(min-width: 1280px) 720px, (min-width: 1024px) 62vw, 100vw" />
+            </Lightbox>
             {caption && <div className="mt-3">{caption}</div>}
           </figure>
         )

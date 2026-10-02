@@ -175,7 +175,13 @@ export function LeadSlider({posts}: {posts: PostCard[]}) {
                   {post.excerpt}
                 </p>
               )}
-              <Byline post={post} className="mt-4" />
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+                <Byline post={post} />
+                <Link href={postPath(post)} className="group meta relative z-10 flex items-center gap-2 text-ink hover:text-signal" tabIndex={-1}>
+                  Read More
+                  <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                </Link>
+              </div>
             </div>
           )
         })}

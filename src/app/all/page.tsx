@@ -7,10 +7,8 @@ import {ALL_SECTION as ALL} from '@/lib/data'
 import type {PostCard} from '@/lib/sanity/types'
 import {buildMetadata} from '@/lib/seo'
 
-
 export const metadata: Metadata = buildMetadata({
-  title: 'All articles',
-  description: 'Every article published on Cambridge Radar, newest first.',
+  title: 'All Archives',
   path: '/all',
 })
 
