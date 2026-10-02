@@ -111,6 +111,7 @@ export type Settings = {
   newsletterAutoSend?: boolean
   gaId?: string
   clarityId?: string
+  gtmId?: string
   googleVerification?: string
   bingVerification?: string
 }

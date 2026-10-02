@@ -2,10 +2,11 @@ import Link from 'next/link'
 
 import {ArrowLeft, ArrowRight} from '@/components/icons'
 import {PageHeader} from '@/components/layout/PageHeader'
+import {JsonLd} from '@/components/seo/JsonLd'
 import {Reveal} from '@/components/motion/Reveal'
 import {StoryCard, StoryWide} from '@/components/story/Story'
 import type {PostCard, Section} from '@/lib/sanity/types'
-import {cn, pad} from '@/lib/utils'
+import {absolute, cn, pad, postPath} from '@/lib/utils'
 
 export const PAGE_SIZE = 9
 
@@ -25,8 +26,33 @@ export function SectionView({
   const base = `/${section.slug}`
   const href = (n: number) => (n <= 1 ? base : `${base}/page/${n}`)
 
+  const url = absolute(page > 1 ? `${base}/page/${page}` : base)
   return (
     <div className="shell">
+      <JsonLd
+        data={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: section.title,
+            url,
+            description: section.description,
+            isPartOf: {'@id': `${absolute('/')}#website`},
+            mainEntity: {
+              '@type': 'ItemList',
+              itemListElement: posts.map((p, i) => ({'@type': 'ListItem', position: i + 1, url: absolute(postPath(p)), name: p.title})),
+            },
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {'@type': 'ListItem', position: 1, name: 'Cambridge Radar', item: absolute('/')},
+              {'@type': 'ListItem', position: 2, name: section.title, item: absolute(base)},
+            ],
+          },
+        ]}
+      />
       <PageHeader
         crumbs={[{label: 'Cambridge Radar', href: '/'}, {label: 'Section'}]}
         title={section.title}

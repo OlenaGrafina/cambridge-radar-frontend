@@ -1,5 +1,6 @@
 import type {Metadata} from 'next'
 
+import {SearchTracker} from '@/components/analytics/SearchTracker'
 import {SearchIcon} from '@/components/icons'
 import {StoryRow} from '@/components/story/Story'
 import {getLatest} from '@/lib/data'
@@ -35,6 +36,7 @@ export default async function SearchPage({searchParams}: Props) {
 
   return (
     <div className="shell">
+      <SearchTracker term={query} results={results.length} />
       <header className="pt-page pb-8">
         <p className="meta">Search</p>
         <form action="/search" role="search" className="mt-6 flex items-center gap-4 border-b-2 border-rule-strong pb-3">

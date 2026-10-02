@@ -2,6 +2,7 @@ import type {Metadata} from 'next'
 import Link from 'next/link'
 import {notFound, permanentRedirect} from 'next/navigation'
 
+import {ArticleTracker} from '@/components/analytics/ArticleTracker'
 import {AuthorCard} from '@/components/article/AuthorCard'
 import {Body, headingIds, withoutRepeatedDek} from '@/components/article/Body'
 import {Comments} from '@/components/article/Comments'
@@ -108,6 +109,7 @@ export default async function ArticlePage({params}: Params) {
   return (
     <>
       <ReadingProgress />
+      <ArticleTracker article={post.slug} section={post.section?.slug} author={post.author?.name} />
       <JsonLd data={jsonLd} />
 
       <article className="shell">
@@ -213,7 +215,9 @@ export default async function ArticlePage({params}: Params) {
               <TocDisclosure items={toc} />
             </div>
 
-            <Body value={body} skipAssetId={post.mainImage?.asset?._id} />
+            <div data-article-body>
+              <Body value={body} skipAssetId={post.mainImage?.asset?._id} />
+            </div>
 
             {post.tags && post.tags.length > 0 && (
               <ul className="mt-block flex flex-wrap gap-2" aria-label="Topics">

@@ -44,6 +44,38 @@ npm run build && npm start
 Old WordPress addresses are redirected (301) — fixed rules in `next.config.ts` plus `redirect`
 documents from Sanity.
 
+## SEO
+
+- Per page: title, description, canonical, Open Graph + Twitter card (lead image cropped to 1200×630,
+  or the generated brand card `/opengraph-image`), `robots` from the Sanity SEO field.
+- JSON-LD: `NewsMediaOrganization` + `WebSite` (search action) site-wide, `NewsArticle` + `BreadcrumbList`
+  on articles, `CollectionPage` + `ItemList` on sections, `ProfilePage` + `Person` on authors.
+- `/sitemap.xml`, `/robots.txt`, `/rss.xml`, `/manifest.webmanifest`, `/icon.svg`, `/apple-icon`.
+- `/llms.txt` (map of sections, articles with summaries, authors) and `/llms-full.txt` (full text) for AI
+  assistants and answer engines.
+- Search Console and Bing verification codes come from Site settings.
+- `NEXT_PUBLIC_NOINDEX=1` on preview/staging deployments: `noindex` everywhere and `Disallow: /`.
+
+## Analytics
+
+Nothing loads until the reader accepts cookies. IDs are set in Sanity → Site settings → Analytics
+(GA4 `G-…`, Microsoft Clarity project, optional Google Tag Manager `GTM-…`) — no deploy needed.
+
+`src/lib/analytics.ts` → `track(name, params)` sends each event to GA4, GTM (dataLayer) and Clarity:
+
+| Event | When | Params | Mark as key event in GA4 |
+|---|---|---|---|
+| `sign_up` | newsletter sign-up | `method: newsletter`, `source` (page/block) | ✅ |
+| `generate_lead` | contact / contribute form sent | `form` | ✅ |
+| `comment_submit` | comment sent for review | `post_id`, `reply` | ✅ |
+| `share` | share buttons, copy link | `method`, `content_type`, `item_id` | |
+| `search` | search results shown | `search_term`, `results` | |
+| `article_read` | 25 / 50 / 75 / 100 % of an article body | `percent`, `article`, `section`, `author` | 100 % optional |
+| `outbound_click` | link to another site | `link_url`, `link_domain` | |
+| `theme_change` | day / night switch | `theme` | |
+
+Page views are sent on every client-side navigation.
+
 ## Environment
 
 See `.env.example`. Without `RESEND_API_KEY` and Turnstile keys the forms still work: everything is

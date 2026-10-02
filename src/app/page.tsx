@@ -7,17 +7,18 @@ import {Reveal} from '@/components/motion/Reveal'
 import {SectionHeading} from '@/components/story/SectionHeading'
 import {StoryCard, StoryFeature, StoryIndex, StoryRow} from '@/components/story/Story'
 import {compact, getHome, getSettings} from '@/lib/data'
+import {buildMetadata} from '@/lib/seo'
 import type {PostCard, Section} from '@/lib/sanity/types'
 import {cn, pad} from '@/lib/utils'
 
 export async function generateMetadata(): Promise<Metadata> {
   const [s, data] = await Promise.all([getSettings(), getHome()])
   const seo = (data.home as {seo?: {title?: string; description?: string}} | null)?.seo
-  return {
-    title: {absolute: seo?.title || `${s.title} — ${s.tagline ?? ''}`},
+  return buildMetadata({
+    title: seo?.title || `${s.title} — ${s.tagline ?? ''}`,
     description: seo?.description || s.description,
-    alternates: {canonical: '/'},
-  }
+    path: '/',
+  })
 }
 
 export default async function HomePage() {

@@ -11,13 +11,6 @@ export const OPEN_CONSENT_EVENT = 'cr:open-consent'
 
 type Consent = {analytics: boolean; at: string}
 
-declare global {
-  interface Window {
-    dataLayer?: unknown[]
-    gtag?: (...args: unknown[]) => void
-    clarity?: ((...args: unknown[]) => void) & {q?: unknown[]}
-  }
-}
 
 function readConsent(): Consent | null {
   try {
@@ -55,6 +48,15 @@ function loadGoogleAnalytics(id: string) {
   inject(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`, 'ga4')
 }
 
+/** Google Tag Manager, for marketing tags added later without a deploy. */
+function loadTagManager(id: string) {
+  if (window.__crGtm) return
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({'gtm.start': Date.now(), event: 'gtm.js'})
+  window.__crGtm = true
+  inject(`https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(id)}`, 'gtm')
+}
+
 function loadClarity(id: string) {
   if (window.clarity) return
   const c = function clarity(...args: unknown[]) {
@@ -68,11 +70,11 @@ function loadClarity(id: string) {
  * Cookie notice. Analytics (GA4, Microsoft Clarity) load only after an
  * explicit "Accept"; "Essential only" keeps the site tracker-free.
  */
-export function ConsentManager({gaId, clarityId}: {gaId?: string; clarityId?: string}) {
+export function ConsentManager({gaId, clarityId, gtmId}: {gaId?: string; clarityId?: string; gtmId?: string}) {
   const [open, setOpen] = useState(false)
   const [consent, setConsent] = useState<Consent | null>(null)
   const pathname = usePathname()
-  const hasTrackers = Boolean(gaId || clarityId)
+  const hasTrackers = Boolean(gaId || clarityId || gtmId)
 
   useEffect(() => {
     const saved = readConsent()
@@ -92,8 +94,9 @@ export function ConsentManager({gaId, clarityId}: {gaId?: string; clarityId?: st
   useEffect(() => {
     if (!consent?.analytics) return
     if (gaId) loadGoogleAnalytics(gaId)
+    if (gtmId) loadTagManager(gtmId)
     if (clarityId) loadClarity(clarityId)
-  }, [consent, gaId, clarityId])
+  }, [consent, gaId, clarityId, gtmId])
 
   // Client-side navigations are page views too.
   useEffect(() => {

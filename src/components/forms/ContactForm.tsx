@@ -9,12 +9,12 @@ import {Honeypot, useFormPost} from './useFormPost'
 
 export function ContactForm() {
   const id = useId()
-  const {status, message, submit, onToken, resetKey, setStatus} = useFormPost('/api/contact')
+  const {status, message, submit, onToken, resetKey, setStatus} = useFormPost('/api/contact', {event: 'generate_lead', params: {form: 'contact'}})
 
   if (status === 'done') {
     return (
       <div role="status" className="border-t border-rule-strong pt-6">
-        <p className="flex items-start gap-3 font-serif text-xl">
+        <p className="t-lead flex items-start gap-3">
           <CheckIcon className="mt-1 shrink-0 text-signal" />
           {message ?? 'Thank you — your message is with the editors. We reply within two working days.'}
         </p>

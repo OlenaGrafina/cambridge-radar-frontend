@@ -10,7 +10,7 @@ import {Honeypot, useFormPost} from './useFormPost'
 
 export function NewsletterForm({source, compact = false}: {source: string; compact?: boolean}) {
   const id = useId()
-  const {status, message, submit, onToken, resetKey} = useFormPost('/api/subscribe')
+  const {status, message, submit, onToken, resetKey} = useFormPost('/api/subscribe', {event: 'sign_up', params: {method: 'newsletter', source}})
 
   if (status === 'done') {
     return (

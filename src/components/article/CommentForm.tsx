@@ -14,7 +14,7 @@ import {CheckIcon, ReplyIcon} from '@/components/icons'
 export function CommentForm({postId, parentId, parentName}: {postId: string; parentId?: string; parentName?: string}) {
   const id = useId()
   const [open, setOpen] = useState(!parentId)
-  const {status, message, submit, onToken, resetKey, setStatus} = useFormPost('/api/comments')
+  const {status, message, submit, onToken, resetKey, setStatus} = useFormPost('/api/comments', {event: 'comment_submit', params: {post_id: postId, reply: Boolean(parentId)}})
 
   if (!open) {
     return (

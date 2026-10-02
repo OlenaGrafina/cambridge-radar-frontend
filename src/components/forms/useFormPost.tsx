@@ -2,10 +2,12 @@
 
 import {useCallback, useState} from 'react'
 
+import {track} from '@/lib/analytics'
+
 export type FormStatus = 'idle' | 'sending' | 'done' | 'error'
 
 /** Posts JSON to an API route and tracks the state for the form UI. */
-export function useFormPost(endpoint: string) {
+export function useFormPost(endpoint: string, analytics?: {event: string; params?: Record<string, string | number | boolean | undefined>}) {
   const [status, setStatus] = useState<FormStatus>('idle')
   const [message, setMessage] = useState<string | null>(null)
   const [token, setToken] = useState('')
@@ -26,6 +28,7 @@ export function useFormPost(endpoint: string) {
       const json = (await res.json().catch(() => ({}))) as {message?: string; error?: string}
       if (!res.ok) throw new Error(json.error || 'Something went wrong. Please try again.')
       setStatus('done')
+      if (analytics) track(analytics.event, analytics.params)
       setMessage(json.message ?? null)
       form.reset()
     } catch (err) {

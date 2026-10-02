@@ -30,7 +30,7 @@ export const settingsQuery = /* groq */ `*[_id == "siteSettings"][0]{
   "mainMenu": mainMenu[]->{_type, title, "slug": slug.current},
   topMenu[]{label, href},
   newsletterTitle, newsletterText, newsletterAutoSend,
-  gaId, clarityId, googleVerification, bingVerification
+  gaId, clarityId, gtmId, googleVerification, bingVerification
 }`
 
 export const homeQuery = /* groq */ `{

@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react'
 import {flushSync} from 'react-dom'
 
 import {MoonIcon, SunIcon} from '@/components/icons'
+import {track} from '@/lib/analytics'
 import {cn} from '@/lib/utils'
 
 type Theme = 'light' | 'dark'
@@ -40,6 +41,7 @@ export function ThemeToggle({className, withLabel = false}: {className?: string;
         localStorage.setItem('cr-theme', next)
       } catch {}
       setTheme(next)
+      track('theme_change', {theme: next})
     }
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
