@@ -37,12 +37,13 @@ export default async function AuthorsPage() {
           <h2 id="editorial" className="kicker mb-6">
             Editorial
           </h2>
-          <ul className="grid gap-col md:grid-cols-2">
+          <ul className="grid gap-y-12">
             {editorial.map((a) => (
               <li key={a._id}>
-                <Link href={`/authors/${a.slug}`} className="group grid grid-cols-[8rem_1fr] gap-col sm:grid-cols-[11rem_1fr]">
-                  <Portrait author={a} sizes="176px" />
-                  <div className="self-end">
+                {/* Same column width as every contributor card below. */}
+                <Link href={`/authors/${a.slug}`} className="group grid grid-cols-2 gap-x-col md:grid-cols-3 lg:grid-cols-4">
+                  <Portrait author={a} sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw" />
+                  <div className="self-end md:col-span-2 lg:col-span-3">
                     <p className="t-h2">
                       <span className="hover-line">{a.name}</span>
                     </p>

@@ -76,7 +76,6 @@ export default async function HomePage() {
           >
             <h2 id="latest-title" className="kicker flex items-center justify-between border-t-2 border-rule-strong pt-3">
               Latest
-              <span className="meta">{pad(index.length)}</span>
             </h2>
             <ol className="mt-5 divide-y divide-rule">
               {index.map((post, i) => (
@@ -159,7 +158,7 @@ function SectionRow({section, index}: {section: Section & {posts: PostCard[]}; i
   const flip = index % 2 === 1
   const heading = (
     <div id={`row-${section.slug}`}>
-      <SectionHeading title={section.title} href={`/${section.slug}`} index={pad(index + 1)} className="mb-8" />
+      <SectionHeading title={section.title} href={`/${section.slug}`} className="mb-8" />
     </div>
   )
 

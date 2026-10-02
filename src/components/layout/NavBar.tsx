@@ -8,13 +8,16 @@ import {SearchIcon} from '@/components/icons'
 import type {MenuItem, SanityImage} from '@/lib/sanity/types'
 import {cn} from '@/lib/utils'
 
+import {Logo} from './Logo'
 import {ThemeToggle} from './ThemeToggle'
 
 /**
- * Section bar. Sticks to the top; once the masthead scrolls away it
- * condenses and the publication name slides in on the left.
+ * Section bar. As on the original site, the logo and the menu follow the
+ * reader: once the masthead scrolls away the bar sticks, the logo slides in
+ * on the left and search / night mode appear on the right. The date bar
+ * above scrolls away. On phones the section strip alone stays pinned.
  */
-export function NavBar({sections, title}: {sections: MenuItem[]; title: string; logo?: SanityImage | null}) {
+export function NavBar({sections, title, logo}: {sections: MenuItem[]; title: string; logo?: SanityImage | null}) {
   const pathname = usePathname()
   const sentinel = useRef<HTMLDivElement>(null)
   const [stuck, setStuck] = useState(false)
@@ -44,12 +47,13 @@ export function NavBar({sections, title}: {sections: MenuItem[]; title: string; 
               href="/"
               aria-hidden={!stuck}
               tabIndex={stuck ? 0 : -1}
+              aria-label={`${title} — home`}
               className={cn(
-                't-h4 hidden shrink-0 whitespace-nowrap uppercase transition-all duration-500 ease-[var(--ease-out-quart)] md:block',
+                'hidden shrink-0 transition-all duration-500 ease-[var(--ease-out-quart)] md:block',
                 stuck ? 'translate-x-0 opacity-100' : 'pointer-events-none -translate-x-2 opacity-0 md:absolute',
               )}
             >
-              {title}
+              <Logo logo={logo} title={title} height={30} />
             </Link>
 
             <nav aria-label="Sections" className="no-scrollbar -mx-4 flex-1 overflow-x-auto px-4 [mask-image:linear-gradient(to_right,black_85%,transparent)] md:mx-0 md:px-0 md:[mask-image:none]">

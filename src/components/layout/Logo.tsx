@@ -47,11 +47,11 @@ export function Logo({
       priority={priority}
       sizes={mobileHeight ? `(min-width: 768px) ${width}px, ${smallWidth}px` : `${width}px`}
       quality={85}
-      className={cn('logo-art w-auto max-w-full', className)}
+      className={cn('logo-art', className)}
       style={
         {
-          '--h': `${height}px`,
-          '--h-sm': `${small}px`,
+          '--w': `${width}px`,
+          '--w-sm': `${smallWidth}px`,
         } as React.CSSProperties
       }
     />

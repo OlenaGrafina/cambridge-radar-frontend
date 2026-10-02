@@ -38,12 +38,11 @@ export function Toc({items}: {items: TocItem[]}) {
                 href={`#${item.id}`}
                 aria-current={isActive ? 'location' : undefined}
                 className={cn(
-                  't-ui-sm group grid grid-cols-[1.75rem_1fr] gap-1 py-1.5 transition-colors duration-300',
-                  isActive ? 'text-ink' : 'text-muted hover:text-ink',
+                  't-ui-sm relative block border-l py-1.5 pl-4 transition-colors duration-300',
+                  isActive ? 'border-ink text-ink' : 'border-rule text-muted hover:text-ink',
                 )}
               >
-                <span className={cn('meta pt-[3px] transition-colors', isActive && '!text-signal')}>{pad(i + 1)}</span>
-                <span>{item.text}</span>
+                {item.text}
               </a>
             </li>
           )
@@ -59,7 +58,7 @@ export function TocDisclosure({items}: {items: TocItem[]}) {
   return (
     <details className="group border-y border-rule xl:hidden">
       <summary className="flex cursor-pointer list-none items-center justify-between py-3.5">
-        <span className="kicker">Contents · {pad(items.length)}</span>
+        <span className="kicker">Contents</span>
         <span aria-hidden="true" className="meta transition-transform duration-300 group-open:rotate-45">
           +
         </span>
@@ -67,9 +66,8 @@ export function TocDisclosure({items}: {items: TocItem[]}) {
       <ol className="pb-4">
         {items.map((item, i) => (
           <li key={item.id}>
-            <a href={`#${item.id}`} className="t-ui grid grid-cols-[1.75rem_1fr] gap-1 py-1.5 text-ink-2">
-              <span className="meta pt-[3px]">{pad(i + 1)}</span>
-              <span>{item.text}</span>
+            <a href={`#${item.id}`} className="t-ui block border-l border-rule py-1.5 pl-4 text-ink-2">
+              {item.text}
             </a>
           </li>
         ))}

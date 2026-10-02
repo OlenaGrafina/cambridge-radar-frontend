@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import {SanityImg} from '@/components/media/SanityImg'
 import type {PostCard} from '@/lib/sanity/types'
-import {cn, pad, postPath} from '@/lib/utils'
+import {cn, postPath} from '@/lib/utils'
 
 import {Byline, StoryMeta} from './StoryMeta'
 
@@ -111,10 +111,10 @@ export function StoryRow({
   )
 }
 
-export function StoryIndex({post, index}: {post: PostCard; index: number}) {
+/** Headline list item without an image — the "Latest" column. */
+export function StoryIndex({post}: {post: PostCard; index?: number}) {
   return (
-    <article className="group relative grid grid-cols-[2rem_1fr] gap-x-2">
-      <span className="meta pt-[0.3em] tabular">{pad(index)}</span>
+    <article className="group relative">
       <div className="min-w-0">
         <h3 className="t-h5">
           <Link href={postPath(post)} className={stretched}>

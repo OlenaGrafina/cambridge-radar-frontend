@@ -189,7 +189,7 @@ export default async function ArticlePage({params}: Params) {
                 </p>
               </div>
             </div>
-            <Share url={url} title={post.title} />
+            <Share url={url} title={post.title} image={imageUrl(post.mainImage, 1000)} />
           </div>
         </header>
 
@@ -236,7 +236,7 @@ export default async function ArticlePage({params}: Params) {
 
             <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-y border-rule py-4">
               <p className="kicker">Share this analysis</p>
-              <Share url={url} title={post.title} />
+              <Share url={url} title={post.title} image={imageUrl(post.mainImage, 1000)} />
             </div>
 
             {post.series && compact(post.series.posts).length > 1 && (

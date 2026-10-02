@@ -5,6 +5,7 @@ import {NewsletterForm} from '@/components/forms/NewsletterForm'
 import type {Settings} from '@/lib/sanity/types'
 
 import {ConsentLink} from '../consent/ConsentLink'
+import {CodeSiteCredit} from './CodeSiteCredit'
 import {Logo} from './Logo'
 
 export function Footer({settings}: {settings: Settings}) {
@@ -16,7 +17,7 @@ export function Footer({settings}: {settings: Settings}) {
       <div className="shell pt-section pb-10">
         <div className="grid-12 gap-y-12">
           <div className="col-span-12 md:col-span-5">
-            <Link href="/" aria-label={`${settings.title} — home`} className="inline-block">
+            <Link href="/" aria-label={`${settings.title} — home`} className="block w-fit max-w-full">
               <Logo logo={settings.logo} title={settings.title} height={72} />
             </Link>
             {settings.tagline && <p className="meta mt-3 !text-ink/60">{settings.tagline}</p>}
@@ -109,6 +110,7 @@ export function Footer({settings}: {settings: Settings}) {
               </a>
             </li>
           </ul>
+          <CodeSiteCredit />
         </div>
       </div>
     </footer>

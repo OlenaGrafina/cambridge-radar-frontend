@@ -74,7 +74,7 @@ export default async function AuthorPage({params}: Params) {
             </div>
           )}
         </div>
-        <div className="rise col-span-12 md:col-span-8 lg:col-span-8 lg:col-start-5" style={{'--i': 1} as React.CSSProperties}>
+        <div className="rise col-span-12 md:col-span-8 lg:col-span-8" style={{'--i': 1} as React.CSSProperties}>
           <p className="meta">{author.isEditorial ? 'Editorial' : 'Contributor'}</p>
           <h1 className="t-h1 mt-4">{author.name}</h1>
           {author.role && <p className="t-ui mt-4 text-ink">{author.role}</p>}
@@ -106,7 +106,7 @@ export default async function AuthorPage({params}: Params) {
       </header>
 
       <section aria-label={`Articles by ${author.name}`}>
-        <SectionHeading title="Articles" index={pad(posts.length)} className="mb-2" />
+        <SectionHeading title="Articles" className="mb-2" />
         {posts.length ? (
           <ul className="divide-y divide-rule">
             {posts.map((post, i) => (

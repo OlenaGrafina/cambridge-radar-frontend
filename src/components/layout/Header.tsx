@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import {SearchIcon} from '@/components/icons'
+import {NETWORK_LABEL, SearchIcon, SocialIcon} from '@/components/icons'
 import type {Settings} from '@/lib/sanity/types'
 
 import {Logo} from './Logo'
@@ -14,14 +14,11 @@ export function Header({settings}: {settings: Settings}) {
   const top = settings.topMenu ?? []
 
   return (
+    <>
     <header className="relative z-40 bg-paper">
       {/* Utility bar */}
       <div className="shell hidden h-12 items-center justify-between md:flex">
-        <p className="meta flex items-center gap-3">
-          <span className="relative inline-flex h-1.5 w-1.5" aria-hidden="true">
-            <span className="absolute inset-0 rounded-full bg-signal motion-safe:animate-[ping_2.4s_cubic-bezier(0,0,0.2,1)_infinite]" />
-            <span className="relative h-1.5 w-1.5 rounded-full bg-signal" />
-          </span>
+        <p className="meta">
           <Today />
         </p>
         <nav aria-label="Utility" className="flex items-center gap-1">
@@ -34,6 +31,23 @@ export function Header({settings}: {settings: Settings}) {
               </li>
             ))}
           </ul>
+          {(settings.social ?? []).length > 0 && (
+            <ul className="mr-2 flex items-center border-l border-rule pl-3" aria-label="Follow">
+              {(settings.social ?? []).map((s) => (
+                <li key={s.url}>
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Cambridge Radar on ${NETWORK_LABEL[s.network] ?? s.network}`}
+                    className="grid h-9 w-9 place-items-center text-ink-2 transition-colors hover:text-ink"
+                  >
+                    <SocialIcon network={s.network} size={15} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
           <Link href="/search" className="icon-btn" aria-label="Search">
             <SearchIcon />
           </Link>
@@ -44,7 +58,7 @@ export function Header({settings}: {settings: Settings}) {
       {/* Masthead */}
       <div className="shell grid grid-cols-[2.5rem_1fr_2.5rem] items-center gap-2 pt-3 pb-4 md:block md:pt-2 md:pb-7">
         <MobileMenu settings={settings} />
-        <Link href="/" className="mx-auto block w-fit" aria-label={`${settings.title} — home`}>
+        <Link href="/" className="masthead-logo mx-auto block w-fit" aria-label={`${settings.title} — home`}>
           <Logo logo={settings.logo} title={settings.title} height={104} mobileHeight={44} priority />
         </Link>
         <Link href="/search" className="icon-btn md:hidden" aria-label="Search">
@@ -55,7 +69,8 @@ export function Header({settings}: {settings: Settings}) {
         )}
       </div>
 
-      <NavBar sections={sections} title={settings.title} logo={settings.logo} />
     </header>
+    <NavBar sections={sections} title={settings.title} logo={settings.logo} />
+    </>
   )
 }

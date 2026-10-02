@@ -59,9 +59,8 @@ export function MobileMenu({settings}: {settings: Settings}) {
             <ul>
               {sections.map((item, i) => (
                 <li key={item.slug} className="border-b border-rule">
-                  <Link href={`/${item.slug}`} className="flex items-baseline gap-4 py-3.5">
-                    <span className="meta w-6">{pad(i + 1)}</span>
-                    <span className="t-h3">{item.title}</span>
+                  <Link href={`/${item.slug}`} className="t-h3 block py-3.5">
+                    {item.title}
                   </Link>
                 </li>
               ))}

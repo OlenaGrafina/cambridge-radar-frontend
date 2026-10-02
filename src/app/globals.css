@@ -224,15 +224,27 @@
     font-family: var(--font-newsreader-italic), var(--font-serif);
   }
 
+  /* Logos scale by width with height auto: a narrow column shrinks them
+     proportionally instead of squashing them. */
   .logo-art {
     filter: var(--logo-filter);
     mix-blend-mode: var(--logo-blend);
-    height: var(--h-sm);
+    width: var(--w-sm);
+    max-width: 100%;
+    height: auto;
   }
   @media (min-width: 48rem) {
     .logo-art {
-      height: var(--h);
+      width: var(--w);
     }
+  }
+
+  /* Everything clickable shows the hand (Tailwind v4 resets buttons to default). */
+  :where(a[href], button:not(:disabled), [role='button'], summary, label[for], select, input[type='checkbox'], input[type='radio'], input[type='submit']) {
+    cursor: pointer;
+  }
+  :where(button:disabled, [aria-disabled='true']) {
+    cursor: not-allowed;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -681,6 +693,36 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Images inside revealed blocks open like a shutter, bottom edge last. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal .frame {
+    clip-path: inset(0 0 12% 0);
+    transition: clip-path 1100ms var(--ease-out-quart);
+  }
+  .reveal.is-in .frame {
+    clip-path: inset(0);
+  }
+}
+
+/* Masthead hands over to the sticky bar: the big logo eases back and fades
+   over the first 200px of scroll (scroll-driven, no JS). */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
+    .masthead-logo {
+      transform-origin: 50% 100%;
+      animation: masthead-out linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 200px;
+    }
+  }
+}
+@keyframes masthead-out {
+  to {
+    transform: scale(0.86);
+    opacity: 0.15;
   }
 }
 

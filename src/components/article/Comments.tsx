@@ -55,7 +55,7 @@ export function Comments({comments, postId, open}: {comments: Comment[]; postId:
     <section id="comments" aria-labelledby="comments-title" className="scroll-mt-24">
       <h2 id="comments-title" className="flex items-baseline justify-between border-t-2 border-rule-strong pt-3">
         <span className="t-h3">Discussion</span>
-        <span className="meta">{pad(comments.length)} {comments.length === 1 ? 'comment' : 'comments'}</span>
+        <span className="meta">{comments.length} {comments.length === 1 ? 'comment' : 'comments'}</span>
       </h2>
       {roots.length > 0 ? (
         <ol className="mt-8 space-y-8">

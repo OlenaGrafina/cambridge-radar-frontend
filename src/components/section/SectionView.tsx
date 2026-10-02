@@ -59,7 +59,7 @@ export function SectionView({
         lede={section.description}
         aside={
           <>
-            {pad(total)} {total === 1 ? 'article' : 'articles'}
+            {total} {total === 1 ? 'article' : 'articles'}
             {pages > 1 && ` · page ${page} of ${pages}`}
           </>
         }
@@ -103,7 +103,7 @@ export function SectionView({
                     n === page ? 'bg-ink !text-paper' : 'hover:text-ink',
                   )}
                 >
-                  {pad(n)}
+                  {n}
                 </Link>
               </li>
             ))}

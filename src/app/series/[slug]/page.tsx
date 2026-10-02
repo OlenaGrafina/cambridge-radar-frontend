@@ -34,15 +34,15 @@ export default async function SeriesPage({params}: Params) {
 
   return (
     <div className="shell">
-      <PageHeader kicker={`Series · ${pad(series.posts.length)} parts`} title={series.title} lede={series.description}>
+      <PageHeader kicker={`Series · ${series.posts.length} parts`} title={series.title} lede={series.description}>
         {series.image?.asset && (
           <SanityImg image={series.image} ratio={2 / 1} priority sizes="(min-width: 1320px) 1256px, 100vw" className="mt-block" />
         )}
       </PageHeader>
       <ol className="divide-y divide-rule border-t-2 border-rule-strong">
         {series.posts.map((post, i) => (
-          <Reveal as="li" key={post._id} index={i % 3} className="grid grid-cols-[3rem_1fr] gap-2 py-6">
-            <span className="t-h3 text-muted">{pad(i + 1)}</span>
+          <Reveal as="li" key={post._id} index={i % 3} className="grid grid-cols-[4.5rem_1fr] gap-2 py-6">
+            <span className="meta pt-1">Part {i + 1}</span>
             <StoryRow post={post} showExcerpt />
           </Reveal>
         ))}

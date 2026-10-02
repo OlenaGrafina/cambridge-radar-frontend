@@ -7,7 +7,7 @@ import {ArrowLeft, ArrowRight} from '@/components/icons'
 import {SanityImg} from '@/components/media/SanityImg'
 import {Byline, StoryMeta} from '@/components/story/StoryMeta'
 import type {PostCard} from '@/lib/sanity/types'
-import {cn, pad, postPath} from '@/lib/utils'
+import {cn, postPath} from '@/lib/utils'
 
 const INTERVAL = 7000
 
@@ -107,8 +107,8 @@ export function LeadSlider({posts}: {posts: PostCard[]}) {
 
       {count > 1 && (
         <div className="mt-4 flex items-center gap-4">
-          <span className="meta tabular text-ink" aria-live="polite">
-            {pad(index + 1)} <span className="text-muted">/ {pad(count)}</span>
+          <span className="sr-only" aria-live="polite">
+            Story {index + 1} of {count}
           </span>
           <ol className="flex flex-1 gap-1.5" aria-label="Choose story">
             {posts.map((post, i) => (
