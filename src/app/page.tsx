@@ -58,14 +58,14 @@ export default async function HomePage() {
   if (!latest.length) {
     return (
       <div className="shell py-section text-center">
-        <p className="t-h2">The first signals are on their way.</p>
+        <p className="t-h2">No posts found</p>
       </div>
     )
   }
 
   return (
     <>
-      {/* First fold: Latest · Lead · Daily feed — a broadsheet with column rules. */}
+      {/* First fold: Latest Articles · Lead · Daily Feed — a broadsheet with column rules. */}
       <section aria-label="Top stories" className="shell pt-page">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-0">
           <div className="rise lg:col-span-6 lg:col-start-4 lg:px-rule" style={{'--i': 0} as React.CSSProperties}>
@@ -78,7 +78,7 @@ export default async function HomePage() {
             style={{'--i': 1} as React.CSSProperties}
           >
             <h2 id="latest-title" className="kicker flex items-center justify-between border-t-2 border-rule-strong pt-3">
-              Latest
+              Latest Articles
             </h2>
             <ol className="mt-5 divide-y divide-rule">
               {index.map((post, i) => (

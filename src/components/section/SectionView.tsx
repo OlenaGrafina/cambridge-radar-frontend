@@ -2,10 +2,12 @@ import {PageHeader} from '@/components/layout/PageHeader'
 import {Pagination} from '@/components/layout/Pagination'
 import {JsonLd} from '@/components/seo/JsonLd'
 import {Reveal} from '@/components/motion/Reveal'
+import {Share} from '@/components/article/Share'
 import {FeedSlider} from '@/components/home/FeedSlider'
+import {SectionHeading} from '@/components/story/SectionHeading'
 import {LatestArticles} from '@/components/sidebar/LatestArticles'
 import {StoryCard, StoryFeature} from '@/components/story/Story'
-import {getDailyFeed} from '@/lib/data'
+import {getDailyFeed, getEarliest, getLatest} from '@/lib/data'
 import type {PostCard, Section} from '@/lib/sanity/types'
 import {absolute, cn, postPath} from '@/lib/utils'
 
@@ -22,7 +24,10 @@ export async function SectionView({
   page: number
   total: number
 }) {
-  const feed = await getDailyFeed()
+  const [feed, earliest, latest] = await Promise.all([getDailyFeed(), getEarliest(4), getLatest(12)])
+  // "Featured Stories" under the archive, as on the original section pages:
+  // four of the newest articles from elsewhere on the site.
+  const featured = latest.filter((p) => p.section?.slug !== section.slug).slice(0, 4)
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE))
   const [first, ...rest] = posts
   const base = `/${section.slug}`
@@ -91,9 +96,28 @@ export async function SectionView({
           <Pagination page={page} pages={pages} href={href} />
         </div>
         <aside aria-label="Latest Articles and Daily Feed" className="col-span-12 space-y-12 lg:col-span-4 lg:border-l lg:border-rule lg:pl-rule">
+          {earliest.length > 1 && <FeedSlider posts={earliest} perPage={2} autoplayMs={5000} viewAllHref={null} />}
           <LatestArticles />
           <FeedSlider title="Daily Feed" posts={feed} perPage={4} autoplayMs={5000} viewAllLabel="View More posts" />
         </aside>
+      </div>
+
+      {featured.length > 0 && (
+        <section aria-label="Featured Stories" className="cv-auto mt-section">
+          <SectionHeading title="Featured Stories" className="mb-8" />
+          <ul className="grid gap-x-col gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((post, i) => (
+              <Reveal as="li" key={post._id} index={i % 4}>
+                <StoryCard post={post} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" />
+              </Reveal>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <div className="mt-section flex flex-wrap items-center justify-between gap-4 border-y border-rule py-4">
+        <p className="kicker">Share this:</p>
+        <Share url={url} title={section.title} />
       </div>
     </div>
   )

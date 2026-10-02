@@ -8,6 +8,7 @@ import {Body, headingIds, withoutRepeatedDek} from '@/components/article/Body'
 import {ReadingProgress} from '@/components/article/ReadingProgress'
 import {PrevNext} from '@/components/article/PostNav'
 import {Share} from '@/components/article/Share'
+import {SubscribeModal} from '@/components/article/SubscribeModal'
 import {Lightbox} from '@/components/media/Lightbox'
 import {LatestArticles} from '@/components/sidebar/LatestArticles'
 import {Toc, TocDisclosure} from '@/components/article/Toc'
@@ -112,6 +113,7 @@ export default async function ArticlePage({params}: Params) {
     <>
       <ReadingProgress />
       <ArticleTracker article={post.slug} section={post.section?.slug} author={post.author?.name} />
+      <SubscribeModal title={settings.newsletterTitle} />
       <JsonLd data={jsonLd} />
 
       <article className="shell">

@@ -11,6 +11,8 @@ import {cn} from '@/lib/utils'
 /**
  * The "Daily Feed" column from the original home page: a slider that pages
  * through articles a few at a time, with a "View all" link to the archive.
+ * Heading and link are optional: section pages also carry the original's
+ * untitled slider of the earliest articles.
  * Pages cross-fade; arrows sit next to the heading. Autoplay pauses on
  * hover/focus and is off for reduced motion.
  */
@@ -22,10 +24,10 @@ export function FeedSlider({
   viewAllLabel = 'View all',
   autoplayMs = 0,
 }: {
-  title: string
+  title?: string
   posts: PostCard[]
   perPage?: number
-  viewAllHref?: string
+  viewAllHref?: string | null
   viewAllLabel?: string
   autoplayMs?: number
 }) {
@@ -50,14 +52,14 @@ export function FeedSlider({
     <div
       role="region"
       aria-roledescription="carousel"
-      aria-label={title}
+      aria-label={title ?? 'Articles'}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      <div className="flex items-end justify-between gap-4 border-t-2 border-rule-strong pt-3">
-        <h2 className="t-h3">{title}</h2>
+      <div className={cn('flex items-end gap-4 border-t-2 border-rule-strong pt-3', title ? 'justify-between' : 'justify-end')}>
+        {title && <h2 className="t-h3">{title}</h2>}
         {pages > 1 && (
           <div className="flex gap-1">
             <button type="button" className="icon-btn !h-9 !w-9" aria-label="Previous articles" onClick={() => go(page - 1)}>
@@ -113,10 +115,12 @@ export function FeedSlider({
         ) : (
           <span />
         )}
-        <Link href={viewAllHref} className="group meta flex items-center gap-2 text-ink hover:text-signal">
-          {viewAllLabel}
-          <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-        </Link>
+        {viewAllHref && (
+          <Link href={viewAllHref} className="group meta flex items-center gap-2 text-ink hover:text-signal">
+            {viewAllLabel}
+            <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Link>
+        )}
       </div>
     </div>
   )

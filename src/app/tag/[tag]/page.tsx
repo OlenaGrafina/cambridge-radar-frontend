@@ -3,12 +3,13 @@ import {notFound} from 'next/navigation'
 
 import {PAGE_SIZE, SectionView} from '@/components/section/SectionView'
 import {buildMetadata} from '@/lib/seo'
-import {getTagArchive, getTags} from '@/lib/tags'
+import {getTagArchive} from '@/lib/tags'
 
 type Params = {params: Promise<{tag: string}>}
 
+// 130+ tags: built on first visit and cached like the rest (ISR), not all at build time.
 export async function generateStaticParams() {
-  return [...(await getTags()).keys()].map((tag) => ({tag}))
+  return []
 }
 
 export async function generateMetadata({params}: Params): Promise<Metadata> {

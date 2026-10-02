@@ -76,6 +76,8 @@ export const dailyFeedQuery = /* groq */ `coalesce(*[_id == "homePage"][0].edito
 
 export const latestQuery = /* groq */ `*[${published}] | order(publishedAt desc)[0...$limit]${postCard}`
 
+export const earliestQuery = /* groq */ `*[${published}] | order(publishedAt asc)[0...$limit]${postCard}`
+
 export const postPathsQuery = /* groq */ `*[${published}]{"slug": slug.current, "section": category->slug.current}`
 
 export const sectionQuery = /* groq */ `*[_type == "category" && slug.current == $slug][0]{

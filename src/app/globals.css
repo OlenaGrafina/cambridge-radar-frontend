@@ -718,8 +718,32 @@ html.a11y-spacing body {
   letter-spacing: 0.03em;
   word-spacing: 0.08em;
 }
-html.a11y-spacing :is(p, li) {
+html.a11y-lines :is(p, li, dd, blockquote) {
   line-height: 1.95 !important;
+}
+html.a11y-mono {
+  filter: grayscale(1);
+}
+html.a11y-low {
+  filter: saturate(0.5);
+}
+html.a11y-high {
+  filter: saturate(1.8);
+}
+html.a11y-titles :is(h1, h2, h3, h4, h5, h6) {
+  outline: 2px solid var(--signal);
+  outline-offset: 4px;
+}
+html.a11y-font body,
+html.a11y-font body * {
+  font-family: Verdana, Tahoma, Arial, sans-serif !important;
+  font-style: normal !important;
+}
+html.a11y-bold body :is(p, li, a, dd, dt, span, label, h1, h2, h3, h4, h5, h6, button) {
+  font-weight: 700 !important;
+}
+html.a11y-left :is(p, li, h1, h2, h3, h4, h5, h6, blockquote, figcaption, dd) {
+  text-align: left !important;
 }
 html.a11y-still *,
 html.a11y-still *::before,
