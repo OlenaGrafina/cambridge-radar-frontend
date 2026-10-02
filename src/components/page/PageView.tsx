@@ -2,59 +2,63 @@ import {Body} from '@/components/article/Body'
 import {ContactForm} from '@/components/forms/ContactForm'
 import {NewsletterForm} from '@/components/forms/NewsletterForm'
 import {MailIcon} from '@/components/icons'
+import {PageHeader} from '@/components/layout/PageHeader'
 import {SanityImg} from '@/components/media/SanityImg'
+import {naturalRatio} from '@/lib/sanity/image'
 import type {Page, Settings} from '@/lib/sanity/types'
 
-/** Static page: About, Contribute, Newsletter, Contacts, Privacy policy. */
+/**
+ * Static page on the article grid: text in the left 7 columns, the form
+ * (contact / newsletter) or a portrait image in the right 4 — the same
+ * columns an article uses, so every long read on the site lines up.
+ */
 export function PageView({page, settings}: {page: Page; settings: Settings}) {
-  const hasForm = page.template === 'contact' || page.template === 'newsletter'
+  const hasImage = Boolean(page.image?.asset)
+  const portrait = hasImage && naturalRatio(page.image) < 1.05
+  const side = page.template === 'contact' || page.template === 'newsletter' || portrait
 
   return (
     <article className="shell">
-      <header className="rise grid gap-8 pt-10 pb-10 md:grid-cols-12 md:pt-16 md:pb-14">
-        <div className="md:col-span-10 lg:col-span-9">
-          <p className="meta">Cambridge Radar</p>
-          <h1 className="display mt-5 text-[3rem] md:text-[5rem] lg:text-[6rem]">{page.title}</h1>
-          {page.lede && (
-            <p className="mt-6 max-w-3xl font-serif text-[1.375rem] leading-snug text-ink-2 md:text-[1.625rem]">{page.lede}</p>
-          )}
-        </div>
-      </header>
+      <PageHeader kicker="Cambridge Radar" title={page.title} lede={page.lede} />
 
-      {page.image?.asset && (
-        <SanityImg image={page.image} ratio={21 / 9} priority sizes="100vw" className="mb-14" />
+      {hasImage && !portrait && (
+        <SanityImg image={page.image} ratio={2 / 1} priority sizes="(min-width: 1320px) 1256px, 100vw" className="mb-block" />
       )}
 
-      <div className="grid gap-14 border-t border-rule-strong pt-10 md:grid-cols-12 md:gap-8">
-        <div className={hasForm ? 'md:col-span-7' : 'md:col-span-8 md:col-start-3 lg:col-span-7 lg:col-start-3'}>
+      <div className="grid-12 gap-y-14">
+        <div className="col-span-12 lg:col-span-8 xl:col-span-7">
           {page.body?.length ? <Body value={page.body} dropCap={false} /> : null}
         </div>
 
-        {page.template === 'contact' && (
-          <aside className="md:col-span-5">
-            <div className="md:sticky md:top-24">
-              <ContactForm />
-              {settings.contactEmail && (
-                <p className="mt-8 flex items-center gap-3 text-[15px] text-ink-2">
-                  <MailIcon />
-                  <a href={`mailto:${settings.contactEmail}`} className="hover-line">
-                    {settings.contactEmail}
-                  </a>
-                </p>
-              )}
-            </div>
-          </aside>
-        )}
+        {side && (
+          <aside className="col-span-12 lg:col-span-4 lg:col-start-9">
+            <div className="space-y-10 lg:sticky lg:top-24">
+              {portrait && <SanityImg image={page.image} ratio={4 / 5} sizes="(min-width: 1024px) 30vw, 100vw" />}
 
-        {page.template === 'newsletter' && (
-          <aside className="md:col-span-5">
-            <div className="bg-paper-2 p-6 md:sticky md:top-24 md:p-8">
-              <p className="kicker text-signal">Subscribe</p>
-              <p className="display mt-3 text-[2rem]">{settings.newsletterTitle}</p>
-              {settings.newsletterText && <p className="mt-3 font-serif text-[1.0625rem] text-ink-2">{settings.newsletterText}</p>}
-              <div className="mt-6">
-                <NewsletterForm source={`page:${page.slug}`} />
-              </div>
+              {page.template === 'contact' && (
+                <div>
+                  <ContactForm />
+                  {settings.contactEmail && (
+                    <p className="t-ui mt-8 flex items-center gap-3 text-ink-2">
+                      <MailIcon />
+                      <a href={`mailto:${settings.contactEmail}`} className="hover-line">
+                        {settings.contactEmail}
+                      </a>
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {page.template === 'newsletter' && (
+                <div className="bg-paper-2 p-6 md:p-8">
+                  <p className="kicker text-signal">Subscribe</p>
+                  <p className="t-h3 mt-3">{settings.newsletterTitle}</p>
+                  {settings.newsletterText && <p className="t-body-sm mt-3 text-ink-2">{settings.newsletterText}</p>}
+                  <div className="mt-6">
+                    <NewsletterForm source={`page:${page.slug}`} />
+                  </div>
+                </div>
+              )}
             </div>
           </aside>
         )}

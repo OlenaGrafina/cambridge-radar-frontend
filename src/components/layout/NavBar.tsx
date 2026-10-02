@@ -45,7 +45,7 @@ export function NavBar({sections, title}: {sections: MenuItem[]; title: string; 
               aria-hidden={!stuck}
               tabIndex={stuck ? 0 : -1}
               className={cn(
-                'display hidden shrink-0 text-[1.375rem] whitespace-nowrap uppercase transition-all duration-500 ease-[var(--ease-out-quart)] md:block',
+                't-h4 hidden shrink-0 whitespace-nowrap uppercase transition-all duration-500 ease-[var(--ease-out-quart)] md:block',
                 stuck ? 'translate-x-0 opacity-100' : 'pointer-events-none -translate-x-2 opacity-0 md:absolute',
               )}
             >
@@ -62,7 +62,7 @@ export function NavBar({sections, title}: {sections: MenuItem[]; title: string; 
                         href={`/${item.slug}`}
                         aria-current={isActive ? 'page' : undefined}
                         className={cn(
-                          'relative block py-3 text-[13px] font-medium tracking-[0.02em] uppercase transition-colors',
+                          't-ui-sm relative block py-3 font-medium tracking-[0.02em] uppercase transition-colors',
                           isActive ? 'text-ink' : 'text-ink-2 hover:text-ink',
                           'after:absolute after:inset-x-0 after:bottom-2 after:h-[2px] after:origin-left after:bg-signal after:transition-transform after:duration-500 after:ease-[var(--ease-out-quart)]',
                           isActive ? 'after:scale-x-100' : 'after:scale-x-0 hover:after:scale-x-100',

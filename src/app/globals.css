@@ -24,7 +24,7 @@
   --selection: #ffd9cf;
   --logo-filter: none;
   --logo-blend: multiply;
-  --img-dim: 1;
+  --img-filter: none;
   color-scheme: light;
 }
 
@@ -42,7 +42,7 @@
     --selection: #5a2215;
     --logo-filter: invert(1);
     --logo-blend: screen;
-    --img-dim: 0.92;
+    --img-filter: brightness(0.92);
     color-scheme: dark;
   }
 }
@@ -60,7 +60,7 @@
   --selection: #5a2215;
   --logo-filter: invert(1);
   --logo-blend: screen;
-  --img-dim: 0.92;
+  --img-filter: brightness(0.92);
   color-scheme: dark;
 }
 
@@ -90,7 +90,70 @@
   }
 }
 
+/*
+ * ── Design system: every size on the site comes from here. ─────────────
+ *
+ * Layout   one container (--container) for every page, a 12-column grid
+ *          with one gap (--gap), one side gutter (--gutter), one distance
+ *          from a column rule to its content (--col-rule), one text
+ *          measure (--measure) for long reads.
+ * Rhythm   --space-page (top of a page), --space-section (between major
+ *          sections), --space-block (between blocks inside a section).
+ * Type     display › h1 › h2 › h3 › h4 › h5 for serif headings, lead and
+ *          body for serif text, ui / ui-sm for sans interface text, meta
+ *          for mono labels. Components use the t-* utilities below and
+ *          never set their own font sizes.
+ */
+:root {
+  --container: 82.5rem;
+  --gutter: 1rem;
+  --gap: 1.25rem;
+  --col-rule: 1.5rem;
+  --measure: 42.5rem;
+
+  --space-page: 2rem;
+  --space-section: 4.5rem;
+  --space-block: 2rem;
+
+  --fs-display: clamp(3rem, 1.6rem + 5.6vw, 7.5rem);
+  --fs-h1: clamp(2.375rem, 1.55rem + 3.3vw, 4.5rem);
+  --fs-h2: clamp(1.875rem, 1.45rem + 1.75vw, 3rem);
+  --fs-h3: clamp(1.5rem, 1.3rem + 0.85vw, 2.125rem);
+  --fs-h4: clamp(1.25rem, 1.18rem + 0.3vw, 1.4375rem);
+  --fs-h5: 1.125rem;
+  --fs-lead: clamp(1.1875rem, 1.08rem + 0.45vw, 1.5rem);
+  --fs-body: 1.1875rem;
+  --fs-body-sm: 1.0625rem;
+  --fs-ui: 0.9375rem;
+  --fs-ui-sm: 0.8125rem;
+  --fs-meta: 0.6875rem;
+}
+@media (min-width: 48rem) {
+  :root {
+    --gutter: 2rem;
+    --gap: 2rem;
+    --col-rule: 2.5rem;
+    --space-page: 3rem;
+    --space-section: 6rem;
+    --space-block: 3rem;
+  }
+}
+@media (min-width: 80rem) {
+  :root {
+    --space-section: 7rem;
+  }
+}
+
 @theme inline {
+  --spacing-gutter: var(--gutter);
+  --spacing-col: var(--gap);
+  --spacing-rule: var(--col-rule);
+  --spacing-page: var(--space-page);
+  --spacing-section: var(--space-section);
+  --spacing-block: var(--space-block);
+  --container-measure: var(--measure);
+  --container-shell: var(--container);
+
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
   --color-ink: var(--ink);
@@ -105,7 +168,7 @@
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, 'SFMono-Regular', monospace;
 
-  --text-meta: 0.6875rem;
+  --text-meta: var(--fs-meta);
   --text-meta--line-height: 1.2;
   --text-meta--letter-spacing: 0.08em;
 
@@ -150,17 +213,26 @@
     text-wrap: balance;
   }
 
-  p {
-    text-wrap: pretty;
+  .frame img {
+    filter: var(--img-filter);
   }
 
-  .frame img {
-    filter: brightness(var(--img-dim));
+  /* Serif italics come from the lazily loaded italic face. */
+  :is(.prose-radar, .prose-small, .font-serif, .t-display, .t-h1, .t-h2, .t-h3, .t-h4, .t-h5, .t-lead, .t-body, .t-body-sm) :is(em, i, cite),
+  .prose-radar blockquote,
+  .font-serif.italic {
+    font-family: var(--font-newsreader-italic), var(--font-serif);
   }
 
   .logo-art {
     filter: var(--logo-filter);
     mix-blend-mode: var(--logo-blend);
+    height: var(--h-sm);
+  }
+  @media (min-width: 48rem) {
+    .logo-art {
+      height: var(--h);
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -175,21 +247,16 @@
 
   .shell {
     width: 100%;
-    max-width: 82.5rem;
+    max-width: var(--container);
     margin-inline: auto;
-    padding-inline: 1rem;
-  }
-  @media (min-width: 48rem) {
-    .shell {
-      padding-inline: 2rem;
-    }
+    padding-inline: var(--gutter);
   }
 
   /* ── Type ───────────────────────────────────────────────────────────── */
 
   .meta {
     font-family: var(--font-mono);
-    font-size: var(--text-meta);
+    font-size: var(--fs-meta);
     line-height: 1.2;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -199,28 +266,11 @@
 
   .kicker {
     font-family: var(--font-mono);
-    font-size: var(--text-meta);
+    font-size: var(--fs-meta);
     line-height: 1.2;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink);
-  }
-
-  .headline {
-    font-family: var(--font-serif);
-    font-optical-sizing: auto;
-    font-weight: 500;
-    letter-spacing: -0.015em;
-    line-height: 1.08;
-    color: var(--ink);
-  }
-
-  .display {
-    font-family: var(--font-serif);
-    font-optical-sizing: auto;
-    font-weight: 400;
-    letter-spacing: -0.025em;
-    line-height: 1;
   }
 
   /* Headline link: underline grows from the left on hover. */
@@ -265,7 +315,7 @@
     height: 2.75rem;
     padding-inline: 1.25rem;
     font-family: var(--font-sans);
-    font-size: 0.875rem;
+    font-size: var(--fs-ui);
     font-weight: 500;
     letter-spacing: 0.01em;
     transition:
@@ -326,7 +376,7 @@
     background: var(--paper);
     border: 1px solid var(--rule);
     color: var(--ink);
-    font-size: 1rem;
+    font-size: 1rem; /* 16px minimum: iOS does not zoom into the field */
     transition: border-color 200ms ease;
   }
   .field::placeholder {
@@ -349,7 +399,7 @@
 
   .prose-radar {
     font-family: var(--font-serif);
-    font-size: 1.1875rem;
+    font-size: var(--fs-body);
     line-height: 1.7;
     color: var(--ink);
     font-optical-sizing: auto;
@@ -358,25 +408,32 @@
   .prose-radar > * + * {
     margin-top: 1.4em;
   }
+  /* Long reads: only the opening blocks are laid out up front. */
+  .prose-radar > :nth-child(n + 8) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 7.5em;
+  }
   .prose-radar p {
     font-weight: 380;
   }
   .prose-radar h2 {
     margin-top: 2.4em;
-    font-size: 1.75rem;
-    line-height: 1.15;
+    font-size: var(--fs-h3);
+    line-height: 1.12;
     font-weight: 500;
     letter-spacing: -0.015em;
     scroll-margin-top: 6rem;
   }
-  .prose-radar h3 {
+  .prose-radar h3,
+  .prose-radar h2.as-h3 {
     margin-top: 2em;
-    font-size: 1.375rem;
+    font-size: var(--fs-h4);
     line-height: 1.2;
     font-weight: 600;
     scroll-margin-top: 6rem;
   }
-  .prose-radar h4 {
+  .prose-radar h4,
+  .prose-radar h3.as-h4 {
     margin-top: 1.8em;
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -454,7 +511,7 @@
 
   .prose-small {
     font-family: var(--font-serif);
-    font-size: 1.0625rem;
+    font-size: var(--fs-body-sm);
     line-height: 1.65;
     color: var(--ink-2);
   }
@@ -466,7 +523,7 @@
     text-underline-offset: 0.18em;
   }
   .prose-small h3 {
-    font-size: 1.25rem;
+    font-size: var(--fs-h4);
     color: var(--ink);
     margin-top: 1.6em;
   }
@@ -486,6 +543,90 @@
     border-top: 1px solid var(--rule-strong);
     transform: translateY(2px);
   }
+}
+
+/*
+ * Off-screen blocks skip style/layout/paint until they near the viewport.
+ * `auto` in contain-intrinsic-size remembers the real height once rendered,
+ * so the scrollbar settles after the first pass.
+ */
+@utility grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap);
+}
+
+@utility t-display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--fs-display);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+@utility t-h1 {
+  font-family: var(--font-serif);
+  font-weight: 450;
+  font-size: var(--fs-h1);
+  line-height: 1.03;
+  letter-spacing: -0.022em;
+}
+@utility t-h2 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--fs-h2);
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+}
+@utility t-h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--fs-h3);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+@utility t-h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--fs-h4);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+@utility t-h5 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--fs-h5);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+@utility t-lead {
+  font-family: var(--font-serif);
+  font-size: var(--fs-lead);
+  line-height: 1.42;
+}
+@utility t-body {
+  font-family: var(--font-serif);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+}
+@utility t-body-sm {
+  font-family: var(--font-serif);
+  font-size: var(--fs-body-sm);
+  line-height: 1.6;
+}
+@utility t-ui {
+  font-family: var(--font-sans);
+  font-size: var(--fs-ui);
+  line-height: 1.4;
+}
+@utility t-ui-sm {
+  font-family: var(--font-sans);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.4;
+}
+
+@utility cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 @layer utilities {

@@ -28,7 +28,7 @@ export function Header({settings}: {settings: Settings}) {
           <ul className="mr-3 flex items-center gap-5">
             {top.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="hover-line text-[13px] text-ink-2 transition-colors hover:text-ink">
+                <Link href={item.href} className="t-ui-sm hover-line text-ink-2 transition-colors hover:text-ink">
                   {item.label}
                 </Link>
               </li>
@@ -45,8 +45,7 @@ export function Header({settings}: {settings: Settings}) {
       <div className="shell grid grid-cols-[2.5rem_1fr_2.5rem] items-center gap-2 pt-3 pb-4 md:block md:pt-2 md:pb-7">
         <MobileMenu settings={settings} />
         <Link href="/" className="mx-auto block w-fit" aria-label={`${settings.title} — home`}>
-          <Logo logo={settings.logo} title={settings.title} height={104} priority className="hidden md:block" />
-          <Logo logo={settings.logo} title={settings.title} height={44} priority className="md:hidden" />
+          <Logo logo={settings.logo} title={settings.title} height={104} mobileHeight={44} priority />
         </Link>
         <Link href="/search" className="icon-btn md:hidden" aria-label="Search">
           <SearchIcon />

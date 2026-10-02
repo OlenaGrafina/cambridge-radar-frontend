@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {ArrowRight} from '@/components/icons'
 import {cn} from '@/lib/utils'
 
-/** Row heading: label on a heavy rule, optional "All →" link on the right. */
+/** Row heading: h3-size title on a heavy rule, optional "All →" on the right. */
 export function SectionHeading({
   title,
   href,
@@ -19,14 +19,14 @@ export function SectionHeading({
 }) {
   return (
     <div className={cn('flex items-end justify-between gap-4 border-t-2 border-rule-strong pt-3', className)}>
-      <Tag className="flex items-baseline gap-3">
+      <Tag className="t-h3 flex items-baseline gap-3">
         {index && <span className="meta">{index}</span>}
         {href ? (
-          <Link href={href} className="display hover-line text-[1.75rem] md:text-[2.125rem]">
+          <Link href={href} className="hover-line">
             {title}
           </Link>
         ) : (
-          <span className="display text-[1.75rem] md:text-[2.125rem]">{title}</span>
+          <span>{title}</span>
         )}
       </Tag>
       {href && (

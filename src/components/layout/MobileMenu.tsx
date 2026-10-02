@@ -61,7 +61,7 @@ export function MobileMenu({settings}: {settings: Settings}) {
                 <li key={item.slug} className="border-b border-rule">
                   <Link href={`/${item.slug}`} className="flex items-baseline gap-4 py-3.5">
                     <span className="meta w-6">{pad(i + 1)}</span>
-                    <span className="display text-[2rem]">{item.title}</span>
+                    <span className="t-h3">{item.title}</span>
                   </Link>
                 </li>
               ))}
@@ -70,18 +70,18 @@ export function MobileMenu({settings}: {settings: Settings}) {
           <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-3">
             {(settings.topMenu ?? []).map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="text-[15px] text-ink-2">
+                <Link href={item.href} className="t-ui text-ink-2">
                   {item.label}
                 </Link>
               </li>
             ))}
             <li>
-              <Link href="/newsletter" className="text-[15px] text-ink-2">
+              <Link href="/newsletter" className="t-ui text-ink-2">
                 Newsletter
               </Link>
             </li>
             <li>
-              <Link href="/contribute" className="text-[15px] text-ink-2">
+              <Link href="/contribute" className="t-ui text-ink-2">
                 Contribute
               </Link>
             </li>

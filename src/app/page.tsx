@@ -53,8 +53,8 @@ export default async function HomePage() {
 
   if (!latest.length) {
     return (
-      <div className="shell py-32 text-center">
-        <p className="display text-4xl">The first signals are on their way.</p>
+      <div className="shell py-section text-center">
+        <p className="t-h2">The first signals are on their way.</p>
       </div>
     )
   }
@@ -62,15 +62,15 @@ export default async function HomePage() {
   return (
     <>
       {/* First fold: Latest · Lead · Daily feed — a broadsheet with column rules. */}
-      <section aria-label="Top stories" className="shell pt-8 md:pt-10">
+      <section aria-label="Top stories" className="shell pt-page">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-0">
-          <div className="rise lg:col-span-6 lg:col-start-4 lg:px-8 xl:px-10" style={{'--i': 0} as React.CSSProperties}>
+          <div className="rise lg:col-span-6 lg:col-start-4 lg:px-rule" style={{'--i': 0} as React.CSSProperties}>
             <LeadSlider posts={lead} />
           </div>
 
           <aside
             aria-labelledby="latest-title"
-            className="rise lg:col-span-3 lg:col-start-1 lg:row-start-1 lg:border-r lg:border-rule lg:pr-8"
+            className="rise lg:col-span-3 lg:col-start-1 lg:row-start-1 lg:border-r lg:border-rule lg:pr-rule"
             style={{'--i': 1} as React.CSSProperties}
           >
             <h2 id="latest-title" className="kicker flex items-center justify-between border-t-2 border-rule-strong pt-3">
@@ -88,10 +88,10 @@ export default async function HomePage() {
 
           <aside
             aria-labelledby="feed-title"
-            className="rise lg:col-span-3 lg:border-l lg:border-rule lg:pl-8"
+            className="rise lg:col-span-3 lg:border-l lg:border-rule lg:pl-rule"
             style={{'--i': 2} as React.CSSProperties}
           >
-            <h2 id="feed-title" className="display border-t-2 border-rule-strong pt-3 text-[1.75rem]">
+            <h2 id="feed-title" className="t-h3 border-t-2 border-rule-strong pt-3">
               {sideTitle}
             </h2>
             <ul className="mt-5 divide-y divide-rule">
@@ -106,13 +106,13 @@ export default async function HomePage() {
       </section>
 
       {/* Section rows */}
-      <div className="shell mt-20 space-y-20 md:mt-28 md:space-y-24">
+      <div className="shell mt-section space-y-section">
         {bigSections.map((section, i) => (
           <SectionRow key={section._id} section={section} index={i} />
         ))}
 
         {smallSections.length > 0 && (
-          <div className={cn('grid gap-12 md:gap-8', smallSections.length > 2 ? 'md:grid-cols-3' : 'md:grid-cols-2')}>
+          <div className={cn('grid gap-x-col gap-y-12', smallSections.length > 2 ? 'md:grid-cols-3' : 'md:grid-cols-2')}>
             {smallSections.map((section, i) => (
               <Reveal key={section._id} index={i} as="section">
                 <SectionHeading title={section.title} href={`/${section.slug}`} as="h2" className="mb-6" />
@@ -123,14 +123,14 @@ export default async function HomePage() {
         )}
       </div>
 
-      <div className="mt-24 md:mt-32">
+      <div className="mt-section">
         <NewsletterBand settings={settings} source="home" />
       </div>
 
       {compact(data.authors).length > 0 && (
-        <section aria-labelledby="voices" className="shell mt-20 md:mt-28">
+        <section aria-labelledby="voices" className="shell cv-auto mt-section">
           <SectionHeading title="Voices" href="/authors" className="mb-2" />
-          <p className="mb-2 max-w-xl font-serif text-[1.0625rem] text-ink-2" id="voices">
+          <p className="t-body-sm mb-2 max-w-xl text-ink-2" id="voices">
             Strategists, researchers and practitioners writing for Cambridge Radar.
           </p>
           <VoicesStrip authors={compact(data.authors)} />
@@ -138,9 +138,9 @@ export default async function HomePage() {
       )}
 
       {archive.length > 0 && (
-        <section aria-label="More from the Radar" className="shell mt-20 md:mt-28">
+        <section aria-label="More from the Radar" className="shell cv-auto mt-section">
           <SectionHeading title="More from the Radar" className="mb-8" />
-          <ul className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="grid gap-x-col gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {archive.map((post, i) => (
               <Reveal as="li" key={post._id} index={i % 4}>
                 <StoryCard post={post} />
@@ -165,11 +165,11 @@ function SectionRow({section, index}: {section: Section & {posts: PostCard[]}; i
   // Two stories: an even split reads better than a feature with one lonely row.
   if (section.posts.length === 2) {
     return (
-      <section aria-labelledby={`row-${section.slug}`}>
+      <section aria-labelledby={`row-${section.slug}`} className="cv-auto">
         {heading}
         <div className="grid gap-12 md:grid-cols-2 md:gap-0">
           {section.posts.map((post, i) => (
-            <Reveal key={post._id} index={i} className={i === 0 ? 'md:border-r md:border-rule md:pr-10' : 'md:pl-10'}>
+            <Reveal key={post._id} index={i} className={i === 0 ? 'md:border-r md:border-rule md:pr-rule' : 'md:pl-rule'}>
               <StoryFeature post={post} sizes="(min-width: 768px) 50vw, 100vw" />
             </Reveal>
           ))}
@@ -179,16 +179,16 @@ function SectionRow({section, index}: {section: Section & {posts: PostCard[]}; i
   }
 
   return (
-    <section aria-labelledby={`row-${section.slug}`}>
+    <section aria-labelledby={`row-${section.slug}`} className="cv-auto">
       {heading}
       <div className="grid gap-10 lg:grid-cols-12 lg:gap-0">
-        <Reveal className={cn('lg:col-span-7', flip ? 'lg:order-2 lg:pl-10' : 'lg:pr-10')}>
+        <Reveal className={cn('lg:col-span-7', flip ? 'lg:order-2 lg:pl-rule' : 'lg:pr-rule')}>
           <StoryFeature post={first} sizes="(min-width: 1024px) 56vw, 100vw" />
         </Reveal>
         <ul
           className={cn(
             'divide-y divide-rule lg:col-span-5',
-            flip ? 'lg:order-1 lg:border-r lg:border-rule lg:pr-10' : 'lg:border-l lg:border-rule lg:pl-10',
+            flip ? 'lg:order-1 lg:border-r lg:border-rule lg:pr-rule' : 'lg:border-l lg:border-rule lg:pl-rule',
           )}
         >
           {others.map((post, i) => (
@@ -198,7 +198,7 @@ function SectionRow({section, index}: {section: Section & {posts: PostCard[]}; i
           ))}
           {section.description && (
             <li className="py-5">
-              <p className="font-serif text-[1rem] leading-relaxed text-muted italic">{section.description}</p>
+              <p className="t-body-sm font-serif text-muted italic">{section.description}</p>
             </li>
           )}
         </ul>

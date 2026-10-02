@@ -21,10 +21,28 @@ const client = createClient({
  * scheduled posts and a missed webhook.
  */
 export function sanityFetch<T>(query: string, params: QueryParams = {}, revalidate = 3600) {
-  return client.fetch<T>(query, params, {
-    cache: 'force-cache',
-    next: {tags: [CONTENT_TAG], revalidate},
-  })
+  return withRetry(() =>
+    client.fetch<T>(query, params, {
+      cache: 'force-cache',
+      next: {tags: [CONTENT_TAG], revalidate},
+    }),
+  )
+}
+
+/** A dropped TLS handshake must not fail a whole static build: retry with backoff. */
+async function withRetry<T>(fn: () => Promise<T>, attempts = 4): Promise<T> {
+  let lastError: unknown
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn()
+    } catch (error) {
+      lastError = error
+      const status = (error as {statusCode?: number}).statusCode
+      if (status && status < 500 && status !== 429) throw error
+      await new Promise((r) => setTimeout(r, 400 * 2 ** i))
+    }
+  }
+  throw lastError
 }
 
 /** Uncached read for search and API routes. */

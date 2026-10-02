@@ -131,7 +131,7 @@ export function ConsentManager({gaId, clarityId}: {gaId?: string; clarityId?: st
       <p id="consent-title" className="kicker">
         Your privacy
       </p>
-      <p className="mt-3 font-serif text-[1.0625rem] leading-snug text-ink-2">
+      <p className="t-body-sm mt-3 text-ink-2">
         We use analytics cookies to understand which analysis people read, only if you agree. Nothing is
         tracked until you choose. <Link href="/privacy-policy" className="underline underline-offset-2">Privacy policy</Link>.
       </p>

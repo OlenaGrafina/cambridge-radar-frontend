@@ -32,10 +32,10 @@ export function VoicesStrip({authors}: {authors: AuthorRef[]}) {
       </div>
       <ul
         ref={track}
-        className="no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-6 overflow-x-auto px-4 md:mx-0 md:scroll-px-0 md:px-0"
+        className="no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-col overflow-x-auto px-4 md:mx-0 md:scroll-px-0 md:px-0"
       >
         {authors.map((a) => (
-          <li key={a._id} className="w-[44vw] shrink-0 snap-start sm:w-[28vw] md:w-[calc((100%-4*1.5rem)/5)]">
+          <li key={a._id} className="w-[44vw] shrink-0 snap-start sm:w-[28vw] md:w-[calc((100%-4*var(--gap))/5)]">
             <Link href={`/authors/${a.slug}`} className="group block">
               {a.photo?.asset ? (
                 <SanityImg
@@ -47,13 +47,13 @@ export function VoicesStrip({authors}: {authors: AuthorRef[]}) {
                 />
               ) : (
                 <div className="frame grid aspect-[4/5] place-items-center">
-                  <span className="display text-5xl text-muted">{initials(a.name)}</span>
+                  <span className="t-h2 text-muted">{initials(a.name)}</span>
                 </div>
               )}
-              <p className="headline mt-3 text-[1.125rem]">
+              <p className="t-h5 mt-3">
                 <span className="hover-line">{a.name}</span>
               </p>
-              {a.role && <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-muted">{a.role}</p>}
+              {a.role && <p className="t-ui-sm mt-1 line-clamp-2 text-muted">{a.role}</p>}
             </Link>
           </li>
         ))}

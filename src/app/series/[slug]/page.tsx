@@ -1,6 +1,7 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
 
+import {PageHeader} from '@/components/layout/PageHeader'
 import {SanityImg} from '@/components/media/SanityImg'
 import {Reveal} from '@/components/motion/Reveal'
 import {StoryRow} from '@/components/story/Story'
@@ -33,22 +34,15 @@ export default async function SeriesPage({params}: Params) {
 
   return (
     <div className="shell">
-      <header className="rise grid gap-8 pt-10 pb-12 md:grid-cols-12 md:pt-16">
-        <div className="md:col-span-7">
-          <p className="meta">Series · {pad(series.posts.length)} parts</p>
-          <h1 className="display mt-5 text-[3rem] md:text-[5rem]">{series.title}</h1>
-          {series.description && <p className="mt-6 max-w-2xl font-serif text-[1.25rem] leading-relaxed text-ink-2">{series.description}</p>}
-        </div>
+      <PageHeader kicker={`Series · ${pad(series.posts.length)} parts`} title={series.title} lede={series.description}>
         {series.image?.asset && (
-          <div className="md:col-span-5">
-            <SanityImg image={series.image} ratio={4 / 3} priority sizes="(min-width: 768px) 40vw, 100vw" />
-          </div>
+          <SanityImg image={series.image} ratio={2 / 1} priority sizes="(min-width: 1320px) 1256px, 100vw" className="mt-block" />
         )}
-      </header>
+      </PageHeader>
       <ol className="divide-y divide-rule border-t-2 border-rule-strong">
         {series.posts.map((post, i) => (
           <Reveal as="li" key={post._id} index={i % 3} className="grid grid-cols-[3rem_1fr] gap-2 py-6">
-            <span className="display text-[2rem] text-muted">{pad(i + 1)}</span>
+            <span className="t-h3 text-muted">{pad(i + 1)}</span>
             <StoryRow post={post} showExcerpt />
           </Reveal>
         ))}

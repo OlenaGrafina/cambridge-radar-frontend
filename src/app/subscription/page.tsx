@@ -13,10 +13,10 @@ export default async function SubscriptionPage({searchParams}: {searchParams: Pr
   const {status = 'invalid'} = await searchParams
   const copy = COPY[status] ?? COPY.invalid
   return (
-    <div className="shell py-20 md:py-32">
+    <div className="shell pt-page pb-section">
       <p className="meta">Newsletter</p>
-      <h1 className="display mt-6 max-w-4xl text-[3rem] md:text-[5.5rem]">{copy.title}</h1>
-      <p className="mt-6 max-w-xl font-serif text-[1.25rem] leading-relaxed text-ink-2">{copy.text}</p>
+      <h1 className="t-display mt-6 max-w-4xl">{copy.title}</h1>
+      <p className="t-lead mt-6 max-w-xl text-ink-2">{copy.text}</p>
       <Link href="/" className="btn btn-ink mt-10">
         Back to the front page
       </Link>

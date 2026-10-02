@@ -38,7 +38,7 @@ export function Toc({items}: {items: TocItem[]}) {
                 href={`#${item.id}`}
                 aria-current={isActive ? 'location' : undefined}
                 className={cn(
-                  'group grid grid-cols-[1.75rem_1fr] gap-1 py-1.5 text-[14px] leading-snug transition-colors duration-300',
+                  't-ui-sm group grid grid-cols-[1.75rem_1fr] gap-1 py-1.5 transition-colors duration-300',
                   isActive ? 'text-ink' : 'text-muted hover:text-ink',
                 )}
               >
@@ -67,7 +67,7 @@ export function TocDisclosure({items}: {items: TocItem[]}) {
       <ol className="pb-4">
         {items.map((item, i) => (
           <li key={item.id}>
-            <a href={`#${item.id}`} className="grid grid-cols-[1.75rem_1fr] gap-1 py-1.5 text-[15px] text-ink-2">
+            <a href={`#${item.id}`} className="t-ui grid grid-cols-[1.75rem_1fr] gap-1 py-1.5 text-ink-2">
               <span className="meta pt-[3px]">{pad(i + 1)}</span>
               <span>{item.text}</span>
             </a>

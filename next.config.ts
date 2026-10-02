@@ -41,6 +41,8 @@ const nextConfig: NextConfig = {
   // WordPress URL — they all end in "/" — reaches its new address in one hop.
   skipTrailingSlashRedirect: true,
   poweredByHeader: false,
+  // ~11 KB of Tailwind CSS inlined: no render-blocking request for first-time readers.
+  experimental: {inlineCss: true},
   images: {
     loader: 'custom',
     loaderFile: './src/lib/sanity/image-loader.ts',

@@ -64,29 +64,29 @@ export default async function AuthorPage({params}: Params) {
         }}
       />
 
-      <header className="grid gap-10 pt-10 pb-12 md:grid-cols-12 md:gap-8 md:pt-16 md:pb-16">
-        <div className="rise md:col-span-4 lg:col-span-3">
+      <header className="grid-12 gap-y-10 pt-page pb-block">
+        <div className="rise col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
           {author.photo?.asset ? (
             <SanityImg image={author.photo} ratio={4 / 5} priority sizes="(min-width: 768px) 25vw, 100vw" alt={author.name} />
           ) : (
             <div className="frame grid aspect-[4/5] place-items-center">
-              <span className="display text-7xl text-muted">{initials(author.name)}</span>
+              <span className="t-display text-muted">{initials(author.name)}</span>
             </div>
           )}
         </div>
-        <div className="rise md:col-span-8 md:pl-4 lg:col-span-8 lg:col-start-5" style={{'--i': 1} as React.CSSProperties}>
+        <div className="rise col-span-12 md:col-span-8 lg:col-span-8 lg:col-start-5" style={{'--i': 1} as React.CSSProperties}>
           <p className="meta">{author.isEditorial ? 'Editorial' : 'Contributor'}</p>
-          <h1 className="display mt-4 text-[3rem] md:text-[4.5rem] lg:text-[5.5rem]">{author.name}</h1>
-          {author.role && <p className="mt-4 text-[1.0625rem] text-ink">{author.role}</p>}
-          {author.expertise && <p className="mt-1 text-[15px] text-muted">{author.expertise}</p>}
+          <h1 className="t-h1 mt-4">{author.name}</h1>
+          {author.role && <p className="t-ui mt-4 text-ink">{author.role}</p>}
+          {author.expertise && <p className="t-ui-sm mt-1 text-muted">{author.expertise}</p>}
 
           <div className="mt-8 border-t border-rule pt-6">
             {author.bio?.length ? (
-              <div className="prose-small max-w-[40rem]">
+              <div className="prose-small max-w-measure">
                 <PortableText value={author.bio} />
               </div>
             ) : (
-              author.shortBio && <p className="prose-small max-w-[40rem]">{author.shortBio}</p>
+              author.shortBio && <p className="prose-small max-w-measure">{author.shortBio}</p>
             )}
           </div>
 
@@ -116,7 +116,7 @@ export default async function AuthorPage({params}: Params) {
             ))}
           </ul>
         ) : (
-          <p className="py-10 font-serif text-lg text-muted">No published articles yet.</p>
+          <p className="t-lead py-block text-muted">No published articles yet.</p>
         )}
       </section>
     </div>

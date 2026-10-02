@@ -14,7 +14,7 @@ export function NewsletterForm({source, compact = false}: {source: string; compa
 
   if (status === 'done') {
     return (
-      <p role="status" className="flex items-start gap-3 font-serif text-[1.0625rem] leading-snug">
+      <p role="status" className="t-body-sm flex items-start gap-3">
         <CheckIcon className="mt-0.5 shrink-0 text-signal" />
         {message ?? 'Almost there — check your inbox to confirm your subscription.'}
       </p>

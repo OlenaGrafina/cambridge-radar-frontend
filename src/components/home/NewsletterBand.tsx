@@ -14,17 +14,17 @@ export function NewsletterBand({settings, source}: {settings: Settings; source: 
           maskImage: 'radial-gradient(circle at center, black 30%, transparent 70%)',
         }}
       />
-      <div className="shell relative grid gap-8 py-14 md:grid-cols-12 md:items-end md:gap-8 md:py-20">
-        <div className="md:col-span-6">
+      <div className="shell relative grid-12 gap-y-8 py-section md:items-end">
+        <div className="col-span-12 md:col-span-6">
           <p className="kicker text-signal">Newsletter</p>
-          <h2 id="newsletter-band" className="display mt-4 text-[2.5rem] md:text-[3.5rem]">
+          <h2 id="newsletter-band" className="t-h2 mt-4">
             {settings.newsletterTitle}
           </h2>
           {settings.newsletterText && (
-            <p className="mt-4 max-w-md font-serif text-[1.125rem] leading-relaxed text-ink-2">{settings.newsletterText}</p>
+            <p className="t-lead mt-4 max-w-md text-ink-2">{settings.newsletterText}</p>
           )}
         </div>
-        <div className="md:col-span-5 md:col-start-8">
+        <div className="col-span-12 md:col-span-5 md:col-start-8">
           <NewsletterForm source={source} />
         </div>
       </div>

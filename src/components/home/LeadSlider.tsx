@@ -152,7 +152,7 @@ export function LeadSlider({posts}: {posts: PostCard[]}) {
         {posts.map((post, i) => {
           const active = i === index
           return (
-            <article
+            <div
               key={post._id}
               role="group"
               aria-roledescription="slide"
@@ -165,18 +165,18 @@ export function LeadSlider({posts}: {posts: PostCard[]}) {
               )}
             >
               <StoryMeta post={post} long className="mt-5" />
-              <h2 className="headline mt-3 text-[2rem] leading-[1.04] md:text-[2.75rem] xl:text-[3.125rem]">
+              <h2 className="t-h2 mt-3">
                 <Link href={postPath(post)} className="hover-line after:absolute after:inset-0">
                   {post.title}
                 </Link>
               </h2>
               {post.excerpt && (
-                <p className="mt-4 line-clamp-3 max-w-[42rem] font-serif text-[1.125rem] leading-relaxed text-ink-2">
+                <p className="t-lead mt-4 line-clamp-3 max-w-measure text-ink-2">
                   {post.excerpt}
                 </p>
               )}
               <Byline post={post} className="mt-4" />
-            </article>
+            </div>
           )
         })}
       </div>

@@ -6,11 +6,11 @@ import {getLatest} from '@/lib/data'
 export default async function NotFound() {
   const latest = await getLatest(5).catch(() => [])
   return (
-    <div className="shell grid gap-14 py-16 md:grid-cols-12 md:py-24">
-      <div className="md:col-span-7">
+    <div className="shell grid-12 gap-y-14 pt-page pb-section">
+      <div className="col-span-12 md:col-span-7">
         <p className="meta">Error 404 · Signal lost</p>
-        <h1 className="display mt-6 text-[3.5rem] md:text-[6rem]">This page is off the radar.</h1>
-        <p className="mt-6 max-w-lg font-serif text-[1.25rem] leading-relaxed text-ink-2">
+        <h1 className="t-display mt-6">This page is off the radar.</h1>
+        <p className="t-lead mt-6 max-w-lg text-ink-2">
           The address may have changed when we moved to the new site. Try search, or start from the front page.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
@@ -23,7 +23,7 @@ export default async function NotFound() {
         </div>
       </div>
       {latest.length > 0 && (
-        <aside className="md:col-span-4 md:col-start-9">
+        <aside className="col-span-12 md:col-span-4 md:col-start-9">
           <p className="kicker border-t-2 border-rule-strong pt-3">Latest</p>
           <ol className="mt-5 divide-y divide-rule">
             {latest.map((post, i) => (

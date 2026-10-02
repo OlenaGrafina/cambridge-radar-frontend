@@ -12,26 +12,26 @@ export function Footer({settings}: {settings: Settings}) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="surface-dark mt-24 bg-paper text-ink md:mt-32">
-      <div className="shell pt-14 pb-10 md:pt-20">
-        <div className="grid gap-12 md:grid-cols-12 md:gap-8">
-          <div className="md:col-span-5">
+    <footer className="surface-dark cv-auto mt-section bg-paper text-ink [contain-intrinsic-size:auto_640px]">
+      <div className="shell pt-section pb-10">
+        <div className="grid-12 gap-y-12">
+          <div className="col-span-12 md:col-span-5">
             <Link href="/" aria-label={`${settings.title} — home`} className="inline-block">
               <Logo logo={settings.logo} title={settings.title} height={72} />
             </Link>
             {settings.tagline && <p className="meta mt-3 !text-ink/60">{settings.tagline}</p>}
-            <p className="mt-8 max-w-sm font-serif text-[1.0625rem] leading-relaxed text-ink/75">
+            <p className="t-body-sm mt-8 max-w-sm text-ink/75">
               {settings.footerNote ||
                 'An independent analytical platform. Signals, context and the people shaping what comes next.'}
             </p>
           </div>
 
-          <nav aria-label="Sections" className="md:col-span-2">
+          <nav aria-label="Sections" className="col-span-6 md:col-span-2">
             <p className="meta !text-ink/50">Sections</p>
             <ul className="mt-4 space-y-2.5">
               {sections.map((s) => (
                 <li key={s.slug}>
-                  <Link href={`/${s.slug}`} className="hover-line text-[15px] text-ink/85 hover:text-ink">
+                  <Link href={`/${s.slug}`} className="t-ui hover-line text-ink/85 hover:text-ink">
                     {s.title}
                   </Link>
                 </li>
@@ -39,7 +39,7 @@ export function Footer({settings}: {settings: Settings}) {
             </ul>
           </nav>
 
-          <nav aria-label="Publication" className="md:col-span-2">
+          <nav aria-label="Publication" className="col-span-6 md:col-span-2">
             <p className="meta !text-ink/50">Radar</p>
             <ul className="mt-4 space-y-2.5">
               {[
@@ -50,7 +50,7 @@ export function Footer({settings}: {settings: Settings}) {
                 {label: 'Contacts', href: '/contacts'},
               ].map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover-line text-[15px] text-ink/85 hover:text-ink">
+                  <Link href={l.href} className="t-ui hover-line text-ink/85 hover:text-ink">
                     {l.label}
                   </Link>
                 </li>
@@ -58,7 +58,7 @@ export function Footer({settings}: {settings: Settings}) {
             </ul>
           </nav>
 
-          <div className="md:col-span-3">
+          <div className="col-span-12 md:col-span-3">
             <p className="meta !text-ink/50">{settings.newsletterTitle}</p>
             <div className="mt-4">
               <NewsletterForm source="footer" compact />

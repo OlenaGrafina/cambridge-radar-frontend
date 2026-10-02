@@ -27,7 +27,7 @@ export function headingIds(blocks: PortableTextBlock[] = []) {
     ids.set(block._key as string, id)
     toc.push({id, text})
   }
-  return {ids, toc}
+  return {ids, toc, level}
 }
 
 /** Drop an opening heading that only repeats the standfirst shown above the body. */
@@ -92,12 +92,23 @@ export function Body({
   /** The lead image's asset: WordPress often repeated it as the first body image. */
   skipAssetId?: string
 }) {
-  const {ids} = headingIds(value)
+  const {ids, level} = headingIds(value)
+  // Articles without h2s: their h3s become the h2 level (same look) so the
+  // outline goes h1 → h2 with no skipped level.
+  const promoteH3 = level === 'h3' && !value.some((b) => b._type === 'block' && b.style === 'h2')
 
   const components: PortableTextComponents = {
     block: {
       h2: ({children, value: block}) => <h2 id={ids.get(block._key as string)}>{children}</h2>,
-      h3: ({children, value: block}) => <h3 id={ids.get(block._key as string)}>{children}</h3>,
+      h3: ({children, value: block}) =>
+        promoteH3 ? (
+          <h2 id={ids.get(block._key as string)} className="as-h3">
+            {children}
+          </h2>
+        ) : (
+          <h3 id={ids.get(block._key as string)}>{children}</h3>
+        ),
+      h4: ({children}) => (promoteH3 ? <h3 className="as-h4">{children}</h3> : <h4>{children}</h4>),
       h1: ({children}) => <h2>{children}</h2>,
     },
     marks: {
@@ -117,21 +128,32 @@ export function Body({
       figure: ({value: img}: {value: SanityImage}) => {
         if (skipAssetId && img.asset?._id === skipAssetId) return null
         const portrait = (img.asset?.metadata?.dimensions?.aspectRatio ?? 1.5) < 1
+        const caption = (img.caption || img.credit) && (
+          <figcaption className="t-ui-sm text-muted">
+            {img.caption && <span className="block">{img.caption}</span>}
+            {img.credit && <span className="meta mt-1.5 block">{img.credit}</span>}
+          </figcaption>
+        )
+        // Every figure keeps the text column's edges. Portraits sit at the
+        // left at 5/12 with the caption beside them, never floating mid-column.
+        if (portrait) {
+          return (
+            <figure className="my-10 grid grid-cols-12 items-end gap-x-6 gap-y-3">
+              <SanityImg image={img} ratio={4 / 5} sizes="(min-width: 640px) 18rem, 60vw" className="col-span-7 sm:col-span-5" />
+              <div className="col-span-12 sm:col-span-7">{caption}</div>
+            </figure>
+          )
+        }
         return (
-          <figure className={cn('my-10', portrait ? 'mx-auto max-w-md' : 'md:-mx-10 lg:-mx-20')}>
-            <SanityImg image={img} sizes={portrait ? '28rem' : '(min-width: 1024px) 840px, 100vw'} />
-            {(img.caption || img.credit) && (
-              <figcaption className="mt-3 flex flex-wrap justify-between gap-x-6 gap-y-1 font-sans text-[13px] leading-snug text-muted">
-                {img.caption && <span>{img.caption}</span>}
-                {img.credit && <span className="meta">{img.credit}</span>}
-              </figcaption>
-            )}
+          <figure className="my-10">
+            <SanityImg image={img} sizes="(min-width: 1280px) 720px, (min-width: 1024px) 62vw, 100vw" />
+            {caption && <div className="mt-3">{caption}</div>}
           </figure>
         )
       },
       pullQuote: ({value: q}: {value: {text: string; attribution?: string}}) => (
-        <figure className="my-12 border-y border-rule-strong py-8 md:-mx-10">
-          <blockquote className="display text-[1.75rem] leading-[1.18] md:text-[2.25rem]">“{q.text}”</blockquote>
+        <figure className="my-12 border-y border-rule-strong py-8">
+          <blockquote className="t-h3">“{q.text}”</blockquote>
           {q.attribution && <figcaption className="meta mt-4">— {q.attribution}</figcaption>}
         </figure>
       ),

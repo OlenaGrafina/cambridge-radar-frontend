@@ -22,19 +22,19 @@ function CommentItem({c, postId, depth}: {c: Node; postId: string; depth: number
       <article className="grid grid-cols-[2.5rem_1fr] gap-4">
         <span
           aria-hidden="true"
-          className={`grid h-10 w-10 place-items-center rounded-full border text-[12px] font-medium ${c.staffAuthor ? 'border-signal text-signal' : 'border-rule text-muted'}`}
+          className={`grid h-10 w-10 place-items-center rounded-full border t-ui-sm font-medium ${c.staffAuthor ? 'border-signal text-signal' : 'border-rule text-muted'}`}
         >
           {initials(c.staffAuthor?.name ?? c.name)}
         </span>
         <div>
           <header className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <p className="text-[15px] font-medium">{c.staffAuthor?.name ?? c.name}</p>
+            <p className="t-ui font-medium">{c.staffAuthor?.name ?? c.name}</p>
             {c.staffAuthor && <span className="meta !text-signal">Author</span>}
             <time dateTime={c.createdAt} className="meta">
               {formatDate(c.createdAt)}
             </time>
           </header>
-          <div className="mt-2 font-serif text-[1.0625rem] leading-relaxed whitespace-pre-line text-ink-2">{c.body}</div>
+          <div className="t-body-sm mt-2 whitespace-pre-line text-ink-2">{c.body}</div>
           {depth < 2 && <CommentForm postId={postId} parentId={c._id} parentName={c.staffAuthor?.name ?? c.name} />}
         </div>
       </article>
@@ -54,7 +54,7 @@ export function Comments({comments, postId, open}: {comments: Comment[]; postId:
   return (
     <section id="comments" aria-labelledby="comments-title" className="scroll-mt-24">
       <h2 id="comments-title" className="flex items-baseline justify-between border-t-2 border-rule-strong pt-3">
-        <span className="display text-[1.75rem]">Discussion</span>
+        <span className="t-h3">Discussion</span>
         <span className="meta">{pad(comments.length)} {comments.length === 1 ? 'comment' : 'comments'}</span>
       </h2>
       {roots.length > 0 ? (
@@ -64,7 +64,7 @@ export function Comments({comments, postId, open}: {comments: Comment[]; postId:
           ))}
         </ol>
       ) : (
-        <p className="mt-6 font-serif text-[1.0625rem] text-muted">No comments yet. Start the conversation.</p>
+        <p className="t-body-sm mt-6 text-muted">No comments yet. Start the conversation.</p>
       )}
       {open ? (
         <div className="mt-10">

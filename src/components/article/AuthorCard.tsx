@@ -13,21 +13,21 @@ export function AuthorCard({author}: {author: Author}) {
           <SanityImg image={author.photo} ratio={4 / 5} sizes="104px" alt="" imgClassName="grayscale group-hover:grayscale-0 transition-[filter] duration-700" />
         ) : (
           <div className="frame grid aspect-[4/5] place-items-center">
-            <span className="display text-3xl text-muted">{initials(author.name)}</span>
+            <span className="t-h3 text-muted">{initials(author.name)}</span>
           </div>
         )}
       </Link>
       <div>
         <p className="kicker">Written by</p>
-        <p className="headline mt-2 text-[1.5rem]">
+        <p className="t-h4 mt-2">
           <Link href={`/authors/${author.slug}`} className="hover-line">
             {author.name}
           </Link>
         </p>
         {(author.role || author.expertise) && (
-          <p className="mt-1 text-[14px] leading-snug text-muted">{[author.role, author.expertise].filter(Boolean).join(' · ')}</p>
+          <p className="t-ui-sm mt-1 text-muted">{[author.role, author.expertise].filter(Boolean).join(' · ')}</p>
         )}
-        {author.shortBio && <p className="mt-4 font-serif text-[1.0625rem] leading-relaxed text-ink-2">{author.shortBio}</p>}
+        {author.shortBio && <p className="t-body-sm mt-4 text-ink-2">{author.shortBio}</p>}
         <div className="mt-5 flex flex-wrap items-center gap-2">
           <Link href={`/authors/${author.slug}`} className="group meta mr-3 flex items-center gap-2 text-ink hover:text-signal">
             All articles

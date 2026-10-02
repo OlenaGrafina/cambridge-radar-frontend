@@ -26,7 +26,7 @@ export function CommentForm({postId, parentId, parentName}: {postId: string; par
 
   if (status === 'done') {
     return (
-      <div role="status" className="mt-4 flex items-start gap-3 bg-paper-2 p-4 font-serif text-[1.0625rem] leading-snug">
+      <div role="status" className="t-body-sm mt-4 flex items-start gap-3 bg-paper-2 p-4">
         <CheckIcon className="mt-0.5 shrink-0 text-signal" />
         <div>
           {message ?? 'Thank you. Your comment will appear once an editor has reviewed it.'}
@@ -61,7 +61,7 @@ export function CommentForm({postId, parentId, parentName}: {postId: string; par
         maxLength={5000}
         rows={parentId ? 3 : 5}
         placeholder="Share a thought, a counterpoint or a source…"
-        className="field font-serif text-[1.0625rem]"
+        className="field t-body-sm"
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-1.5" htmlFor={`${id}-name`}>
@@ -73,7 +73,7 @@ export function CommentForm({postId, parentId, parentName}: {postId: string; par
           <input id={`${id}-email`} name="email" type="email" required autoComplete="email" className="field" />
         </label>
       </div>
-      <label className="flex items-center gap-2.5 text-[14px] text-ink-2">
+      <label className="t-ui-sm flex items-center gap-2.5 text-ink-2">
         <input type="checkbox" name="notify" value="yes" className="h-4 w-4 accent-[var(--signal)]" />
         Email me when someone replies
       </label>

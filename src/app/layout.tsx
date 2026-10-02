@@ -2,6 +2,7 @@ import type {Metadata, Viewport} from 'next'
 import {Geist, Geist_Mono, Newsreader} from 'next/font/google'
 
 import {ConsentManager} from '@/components/consent/ConsentManager'
+import {RevealObserver} from '@/components/motion/RevealObserver'
 import {Footer} from '@/components/layout/Footer'
 import {Header} from '@/components/layout/Header'
 import {JsonLd} from '@/components/seo/JsonLd'
@@ -11,12 +12,21 @@ import {SITE_URL} from '@/lib/utils'
 
 import './globals.css'
 
+// Weight axis only: the optical-size axis doubled the files. The italic is a
+// separate face that is not preloaded — it is only needed inside body text.
 const newsreader = Newsreader({
   subsets: ['latin'],
-  style: ['normal', 'italic'],
-  axes: ['opsz'],
+  style: ['normal'],
   variable: '--font-newsreader',
   display: 'swap',
+})
+
+const newsreaderItalic = Newsreader({
+  subsets: ['latin'],
+  style: ['italic'],
+  variable: '--font-newsreader-italic',
+  display: 'swap',
+  preload: false,
 })
 
 const geist = Geist({subsets: ['latin'], variable: '--font-geist', display: 'swap'})
@@ -76,11 +86,14 @@ export default async function RootLayout({children}: {children: React.ReactNode}
   return (
     <html
       lang="en-GB"
-      className={`${newsreader.variable} ${geist.variable} ${geistMono.variable}`}
+      className={`${newsreader.variable} ${newsreaderItalic.variable} ${geist.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{__html: themeScript}} />
+        {/* Every image comes from Sanity's CDN: open the connection during HTML parse. */}
+        <link rel="preconnect" href="https://cdn.sanity.io" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
         <noscript>
           <style>{'.reveal{opacity:1!important;transform:none!important}'}</style>
         </noscript>
@@ -98,6 +111,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
         </main>
         <Footer settings={settings} />
         <ConsentManager gaId={settings.gaId} clarityId={settings.clarityId} />
+        <RevealObserver />
         <JsonLd
           data={[
             {

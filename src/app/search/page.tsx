@@ -35,7 +35,7 @@ export default async function SearchPage({searchParams}: Props) {
 
   return (
     <div className="shell">
-      <header className="pt-10 pb-8 md:pt-16">
+      <header className="pt-page pb-8">
         <p className="meta">Search</p>
         <form action="/search" role="search" className="mt-6 flex items-center gap-4 border-b-2 border-rule-strong pb-3">
           <SearchIcon size={28} className="shrink-0 text-muted" />
@@ -49,7 +49,7 @@ export default async function SearchPage({searchParams}: Props) {
             defaultValue={query}
             autoFocus
             placeholder="Search analysis, people, topics"
-            className="display w-full min-w-0 bg-transparent text-[2rem] outline-none placeholder:text-muted/60 md:text-[3.25rem]"
+            className="t-h2 w-full min-w-0 bg-transparent outline-none placeholder:text-muted/60"
           />
           <button type="submit" className="btn btn-ink shrink-0">
             Search
