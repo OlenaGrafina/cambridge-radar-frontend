@@ -15,7 +15,9 @@ import {ThemeToggle} from './ThemeToggle'
  * Section bar. As on the original site, the logo and the menu follow the
  * reader: once the masthead scrolls away the bar sticks, the logo slides in
  * on the left and search / night mode appear on the right. The date bar
- * above scrolls away. On phones the section strip alone stays pinned.
+ * above scrolls away. On phones it pins right under the pinned header row.
+ * The sticky element has a solid background and no backdrop-filter: Safari 26
+ * colours the area under its glass address bar from it.
  */
 export function NavBar({sections, title, logo}: {sections: MenuItem[]; title: string; logo?: SanityImage | null}) {
   const pathname = usePathname()
@@ -37,12 +39,12 @@ export function NavBar({sections, title, logo}: {sections: MenuItem[]; title: st
       <div
         data-stuck={stuck || undefined}
         className={cn(
-          'sticky top-0 z-40 bg-paper/92 backdrop-blur-md transition-[box-shadow] duration-300 supports-[backdrop-filter]:bg-paper/80',
+          'sticky top-14 z-40 bg-paper transition-[box-shadow] duration-300 md:top-0',
           stuck && 'shadow-[0_1px_0_var(--rule)]',
         )}
       >
         <div className="shell">
-          <div className={cn('relative flex h-12 items-center gap-4 md:h-[3.25rem]', !stuck && 'md:rule-double')}>
+          <div className={cn('relative flex h-11 items-center gap-4 border-t border-rule md:h-[3.25rem] md:border-t-0', !stuck && 'md:rule-double')}>
             <Link
               href="/"
               aria-hidden={!stuck}

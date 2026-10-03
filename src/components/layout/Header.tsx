@@ -16,7 +16,10 @@ export function Header({settings}: {settings: Settings}) {
 
   return (
     <>
-    <header className="relative z-40 bg-paper">
+    {/* Phones: this row (search · logo · menu) is pinned, the section strip
+        pins right under it, so the header moves as one piece. Desktop: the
+        masthead scrolls away and the section bar takes the logo. */}
+    <header className="sticky top-0 z-40 bg-paper md:relative">
       {/* Utility bar */}
       <div className="shell hidden h-12 items-center justify-between md:flex">
         <p className="meta">
@@ -55,12 +58,12 @@ export function Header({settings}: {settings: Settings}) {
       </div>
 
       {/* Masthead */}
-      <div className="shell grid grid-cols-[2.5rem_1fr_2.5rem] items-center gap-2 pt-3 pb-4 md:block md:pt-2 md:pb-7">
-        <MobileMenu settings={settings} />
-        <Link href="/" className="masthead-logo mx-auto block w-fit" aria-label={`${settings.title} — home`}>
-          <Logo logo={settings.logo} title={settings.title} height={104} mobileHeight={44} priority />
-        </Link>
+      <div className="shell grid h-14 grid-cols-[2.5rem_1fr_2.5rem] items-center gap-2 md:block md:h-auto md:pt-2 md:pb-7">
         <SearchButton className="md:hidden" />
+        <Link href="/" className="masthead-logo mx-auto block w-fit" aria-label={`${settings.title} — home`}>
+          <Logo logo={settings.logo} title={settings.title} height={104} mobileHeight={34} priority />
+        </Link>
+        <MobileMenu settings={settings} />
         {settings.tagline && (
           <p className="meta mt-3 hidden text-center md:block">{settings.tagline}</p>
         )}

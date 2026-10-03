@@ -174,7 +174,7 @@ export function FloatingControls({newsletterTitle, newsletterText}: {newsletterT
   ]
 
   return (
-    <div ref={box} className="pointer-events-none fixed right-3 bottom-3 z-40 flex flex-col items-end gap-2 md:right-5 md:bottom-5">
+    <div ref={box} className="pointer-events-none fixed right-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 flex flex-col items-end gap-2 md:right-5 md:bottom-[calc(1.25rem+env(safe-area-inset-bottom))]">
       {a11y.guide && (
         <div
           ref={guide}

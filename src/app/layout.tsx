@@ -76,6 +76,9 @@ export const viewport: Viewport = {
     {media: '(prefers-color-scheme: dark)', color: '#0c0c0d'},
   ],
   colorScheme: 'light dark',
+  // Safari 26 (Liquid Glass): without cover it leaves a blank band between
+  // the page and the glass address bar.
+  viewportFit: 'cover',
 }
 
 /**

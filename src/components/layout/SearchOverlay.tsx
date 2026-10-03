@@ -51,7 +51,7 @@ export function SearchOverlay() {
       }}
     >
       <div className="shell flex h-full flex-col">
-        <div className="flex h-20 items-center justify-end">
+        <div className="flex h-14 items-center justify-start md:h-20 md:justify-end">
           <button type="button" className="icon-btn" aria-label="Close search" onClick={() => dialog.current?.close()}>
             <CloseIcon />
           </button>

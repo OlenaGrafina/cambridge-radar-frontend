@@ -55,7 +55,7 @@ export function SubscribeModal({title}: {title?: string}) {
       role="dialog"
       aria-modal="false"
       aria-labelledby="sub-modal-title"
-      className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-[40.625rem] border border-rule-strong bg-paper p-6 text-ink shadow-[0_20px_60px_-20px_rgb(0_0_0/0.35)] motion-safe:animate-[rise_520ms_var(--ease-out-quart)_both] md:bottom-8 md:p-8"
+      className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 mx-auto max-w-[40.625rem] border border-rule-strong bg-paper p-6 text-ink shadow-[0_20px_60px_-20px_rgb(0_0_0/0.35)] motion-safe:animate-[rise_520ms_var(--ease-out-quart)_both] md:bottom-[calc(2rem+env(safe-area-inset-bottom))] md:p-8"
     >
       <button type="button" className="icon-btn absolute top-3 right-3 !h-8 !w-8" aria-label="Close" onClick={close}>
         <CloseIcon size={14} />

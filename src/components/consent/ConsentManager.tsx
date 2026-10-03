@@ -140,7 +140,7 @@ export function ConsentManager({gaId, clarityId, gtmId}: {gaId?: string; clarity
           setCustomise(true)
           setOpen(true)
         }}
-        className="fixed bottom-3 left-3 z-40 grid h-11 w-11 place-items-center rounded-full border border-rule bg-paper text-ink transition-colors hover:border-rule-strong md:bottom-5 md:left-5"
+        className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-3 z-40 grid h-11 w-11 place-items-center rounded-full border border-rule bg-paper text-ink transition-colors hover:border-rule-strong md:bottom-[calc(1.25rem+env(safe-area-inset-bottom))] md:left-5"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
           <path d="M20.5 12.5A8.5 8.5 0 1 1 11.5 3.5a3 3 0 0 0 3.6 3.6 3 3 0 0 0 3.8 3.8 2.6 2.6 0 0 0 1.6 1.6Z" />
@@ -158,7 +158,7 @@ export function ConsentManager({gaId, clarityId, gtmId}: {gaId?: string; clarity
       aria-modal="false"
       aria-labelledby="consent-title"
       className={cn(
-        'fixed inset-x-3 bottom-3 z-50 max-h-[calc(100dvh-1.5rem)] overflow-y-auto border border-rule-strong bg-paper p-5 text-ink md:inset-x-auto md:left-6 md:bottom-6 md:max-w-md md:p-6',
+        'fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 max-h-[calc(100dvh-1.5rem)] overflow-y-auto border border-rule-strong bg-paper p-5 text-ink md:inset-x-auto md:left-6 md:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] md:max-w-md md:p-6',
         'motion-safe:animate-[rise_520ms_var(--ease-out-quart)_both]',
       )}
     >

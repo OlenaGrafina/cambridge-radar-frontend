@@ -262,7 +262,9 @@
     width: 100%;
     max-width: var(--container);
     margin-inline: auto;
-    padding-inline: var(--gutter);
+    /* viewport-fit=cover: keep clear of the notch in landscape */
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
   }
 
   /* ── Type ───────────────────────────────────────────────────────────── */
@@ -515,14 +517,26 @@
     font-size: 0.7em;
   }
 
-  /* First paragraph drop cap — the one ornament the broadsheet keeps. */
+  /* First paragraph drop cap — the one ornament the broadsheet keeps.
+     initial-letter sizes it to exactly three lines: the top on the first
+     line's cap height, the foot on the third line's baseline. The float is
+     the fallback (Firefox), tuned to the same three lines. */
   .prose-radar.has-dropcap > p:first-of-type::first-letter {
     float: left;
-    font-size: 4.6em;
-    line-height: 0.82;
+    font-size: 3.62em;
+    line-height: 1;
     font-weight: 500;
-    padding: 0.06em 0.09em 0 0;
-    margin-right: 0.02em;
+    margin: 0.07em 0.1em 0 0;
+  }
+  @supports (initial-letter: 3) or (-webkit-initial-letter: 3) {
+    .prose-radar.has-dropcap > p:first-of-type::first-letter {
+      float: none;
+      font-size: inherit;
+      line-height: inherit;
+      margin: 0 0.1em 0 0;
+      -webkit-initial-letter: 3;
+      initial-letter: 3;
+    }
   }
 
   .prose-small {
@@ -686,6 +700,28 @@
   }
   .fade-img.is-loaded {
     opacity: 1;
+  }
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes drawer-out {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
 }
 
