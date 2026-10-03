@@ -226,12 +226,14 @@ export default async function ArticlePage({params}: Params) {
             </div>
 
             {post.tags && post.tags.length > 0 && (
-              <ul className="mt-block flex flex-wrap gap-2" aria-label="Topics">
+              // Tags are block links inside flex items. Never `inline-block` on this site: the
+              // `block` spacing token makes Tailwind emit `.inline-block { inline-size: … }`.
+              <ul className="mt-block flex min-w-0 flex-wrap gap-2" aria-label="Topics">
                 {post.tags.map((tag) => (
                   <li key={tag}>
                     <Link
                       href={`/tag/${slugify(tag)}`}
-                      className="meta inline-block border border-rule px-2.5 py-1.5 transition-colors hover:border-rule-strong hover:text-ink"
+                      className="meta block border border-rule px-2.5 py-1.5 [overflow-wrap:anywhere] transition-colors hover:border-rule-strong hover:text-ink"
                     >
                       {tag}
                     </Link>

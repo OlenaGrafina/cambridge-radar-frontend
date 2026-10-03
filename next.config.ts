@@ -15,7 +15,8 @@ const clean = (path: string) => (path.length > 1 ? path.replace(/\/+$/, '') : pa
 
 /**
  * Redirects managed in Sanity (the WordPress import writes one per old URL).
- * Read once at build/start; a failed request must never break the build.
+ * Read at build as a snapshot for src/proxy.ts, which applies them and keeps
+ * them fresh while the site runs. A failed request must never break the build.
  */
 async function sanityRedirects(): Promise<Redirect[]> {
   const query = encodeURIComponent('*[_type == "redirect" && defined(source) && defined(destination)]{source, destination, permanent}')
@@ -42,8 +43,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // We strip trailing slashes ourselves (last rule in redirects) so every old
-  // WordPress URL — they all end in "/" — reaches its new address in one hop.
+  // Trailing slashes are stripped by src/proxy.ts together with the Sanity
+  // redirects, so every old WordPress URL (they all end in "/") takes one hop.
   skipTrailingSlashRedirect: true,
   poweredByHeader: false,
   // ~11 KB of Tailwind CSS inlined: no render-blocking request for first-time readers.
@@ -81,16 +82,18 @@ const nextConfig: NextConfig = {
       {source: '/:y(\\d{4})/:m(\\d{2})', destination: '/all', permanent: true},
       {source: '/:y(\\d{4})', destination: '/all', permanent: true},
     ]
-    const fromSanity = await sanityRedirects()
-    const seen = new Set(fixed.map((r) => r.source))
-    const rules = [...fixed, ...fromSanity.filter((r) => !seen.has(r.source) && seen.add(r.source))]
+    // Fixed URL patterns live here; the editor's rules from Sanity are applied
+    // by src/proxy.ts so they change without a deploy.
     return [
       // WordPress search: /?s=term
       {source: '/', has: [{type: 'query', key: 's', value: '(?<s>.*)'}], destination: '/search?q=:s', permanent: true},
-      ...rules.flatMap((r) => [r, {...r, source: `${r.source}/`}]),
-      {source: '/:path+/', destination: '/:path+', permanent: true},
+      ...fixed.flatMap((r) => [r, {...r, source: `${r.source}/`}]),
     ]
   },
 }
 
-export default nextConfig
+export default async function config(): Promise<NextConfig> {
+  // Build-time snapshot of the Sanity redirects for the proxy's first requests.
+  const fromSanity = await sanityRedirects()
+  return {...nextConfig, env: {...nextConfig.env, CR_REDIRECTS: JSON.stringify(fromSanity)}}
+}

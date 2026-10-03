@@ -8,6 +8,17 @@ import {ConsentLink} from '../consent/ConsentLink'
 import {CodeSiteCredit} from './CodeSiteCredit'
 import {Logo} from './Logo'
 
+/** Used until the footer menu is filled in Site settings → Menus. */
+const FOOTER_MENU = [
+  {label: 'Home', href: '/'},
+  {label: 'Authors', href: '/authors'},
+  {label: 'About Us', href: '/about'},
+  {label: 'Contacts', href: '/contacts'},
+  {label: 'Contribute', href: '/contribute'},
+  {label: 'Newsletter', href: '/newsletter'},
+  {label: 'Privacy Policy', href: '/privacy-policy'},
+]
+
 export function Footer({settings}: {settings: Settings}) {
   const sections = (settings.mainMenu ?? []).filter(Boolean)
   const year = new Date().getFullYear()
@@ -43,15 +54,7 @@ export function Footer({settings}: {settings: Settings}) {
           <nav aria-label="Publication" className="col-span-6 md:col-span-2">
             <p className="meta !text-ink/50">Radar</p>
             <ul className="mt-4 space-y-2.5">
-              {[
-                {label: 'Home', href: '/'},
-                {label: 'Authors', href: '/authors'},
-                {label: 'About Us', href: '/about'},
-                {label: 'Contacts', href: '/contacts'},
-                {label: 'Contribute', href: '/contribute'},
-                {label: 'Newsletter', href: '/newsletter'},
-                {label: 'Privacy Policy', href: '/privacy-policy'},
-              ].map((l) => (
+              {(settings.footerMenu?.length ? settings.footerMenu : FOOTER_MENU).map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="t-ui hover-line text-ink/85 hover:text-ink">
                     {l.label}

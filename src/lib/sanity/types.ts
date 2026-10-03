@@ -104,6 +104,7 @@ export type Settings = {
   footerNote?: string
   mainMenu?: MenuItem[]
   topMenu?: {label: string; href: string}[]
+  footerMenu?: {label: string; href: string}[]
   newsletterTitle?: string
   newsletterText?: string
   newsletterAutoSend?: boolean

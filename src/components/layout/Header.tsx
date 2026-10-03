@@ -19,7 +19,7 @@ export function Header({settings}: {settings: Settings}) {
     {/* Phones: this row (search · logo · menu) is pinned, the section strip
         pins right under it, so the header moves as one piece. Desktop: the
         masthead scrolls away and the section bar takes the logo. */}
-    <header className="sticky top-0 z-40 bg-paper md:relative">
+    <header className="skirt sticky top-0 z-40 bg-paper pt-[env(safe-area-inset-top)] md:relative md:pt-0">
       {/* Utility bar */}
       <div className="shell hidden h-12 items-center justify-between md:flex">
         <p className="meta">

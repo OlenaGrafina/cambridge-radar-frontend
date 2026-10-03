@@ -29,6 +29,7 @@ export const settingsQuery = /* groq */ `*[_id == "siteSettings"][0]{
   logo${image}, ogImage${image},
   "mainMenu": mainMenu[]->{_type, title, "slug": slug.current},
   topMenu[]{label, href},
+  footerMenu[]{label, href},
   newsletterTitle, newsletterText, newsletterAutoSend,
   gaId, clarityId, gtmId, googleVerification, bingVerification
 }`
@@ -68,7 +69,7 @@ export const postQuery = /* groq */ `*[${published} && slug.current == $slug][0]
   "next": *[${published} && publishedAt > ^.publishedAt] | order(publishedAt asc)[0]{title, "slug": slug.current, "section": category->{"slug": slug.current}}
 }`
 
-export const tagPostsQuery = /* groq */ `*[${published} && $tagName in tags] | order(publishedAt desc)${postCard}`
+export const tagPostsQuery = /* groq */ `*[${published} && count(tags[@ in $tagNames]) > 0] | order(publishedAt desc)${postCard}`
 
 export const tagListQuery = /* groq */ `array::unique(*[${published} && defined(tags)].tags[])`
 
