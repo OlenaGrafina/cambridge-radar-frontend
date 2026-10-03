@@ -72,7 +72,9 @@ export default async function ArticlePage({params}: Params) {
 
   // Sidebar: more from the same section or author. Bottom: the newest of
   // everything else, so the two lists never repeat each other.
-  const related = compact(post.related).slice(0, 3)
+  // Hand-picked related articles first, the automatic ones fill the rest.
+  const manual = compact(post.relatedManual)
+  const related = [...manual, ...compact(post.related).filter((p) => !manual.some((m) => m._id === p._id))].slice(0, 3)
   const shown = new Set([post._id, ...related.map((p) => p._id)])
   const keepReading = compact(latest).filter((p) => !shown.has(p._id)).slice(0, 3)
 

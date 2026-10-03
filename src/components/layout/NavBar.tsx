@@ -39,8 +39,9 @@ export function NavBar({sections, title, logo}: {sections: MenuItem[]; title: st
       <div
         data-stuck={stuck || undefined}
         className={cn(
-          'sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-40 bg-paper transition-[box-shadow] duration-300 md:top-0 md:skirt',
-          stuck && 'shadow-[0_1px_0_var(--rule)]',
+          'sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-40 bg-paper transition-[box-shadow] duration-300 md:top-0',
+          // Skirt only once pinned: before that it would cover the masthead above.
+          stuck && 'shadow-[0_1px_0_var(--rule)] md:skirt',
         )}
       >
         <div className="shell">

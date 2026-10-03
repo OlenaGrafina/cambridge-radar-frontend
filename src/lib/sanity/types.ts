@@ -69,6 +69,7 @@ export type Post = PostCard & {
   otherSections?: SectionRef[]
   series?: {title: string; slug: string; posts: {_id: string; title: string; slug: string; section: string}[]}
   related: PostCard[]
+  relatedManual?: (PostCard | null)[] | null
   prev?: {title: string; slug: string; section?: {slug: string}} | null
   next?: {title: string; slug: string; section?: {slug: string}} | null
 }

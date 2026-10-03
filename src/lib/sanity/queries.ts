@@ -64,6 +64,8 @@ export const postQuery = /* groq */ `*[${published} && slug.current == $slug][0]
     title, "slug": slug.current,
     "posts": *[${published} && series._ref == ^._id] | order(publishedAt asc){_id, title, "slug": slug.current, "section": category->slug.current}
   },
+  // Editor's picks first (Studio → "Схожі статті (вручну)"), then same section or author.
+  "relatedManual": relatedPosts[]->[${published}]${postCard},
   "related": *[${published} && _id != ^._id && (category._ref == ^.category._ref || author._ref == ^.author._ref)] | order(publishedAt desc)[0...6]${postCard},
   "prev": *[${published} && publishedAt < ^.publishedAt] | order(publishedAt desc)[0]{title, "slug": slug.current, "section": category->{"slug": slug.current}},
   "next": *[${published} && publishedAt > ^.publishedAt] | order(publishedAt asc)[0]{title, "slug": slug.current, "section": category->{"slug": slug.current}}
