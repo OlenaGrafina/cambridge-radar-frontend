@@ -45,9 +45,14 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 4): Promise<T> {
   throw lastError
 }
 
-/** Uncached read for search and API routes. */
+/**
+ * Uncached read for search. Goes through Sanity's API CDN (1M requests/month
+ * on the free plan vs 250k for the live API), which is updated seconds after
+ * a publish: every search query is unique, so nothing else would cache it.
+ */
+const cdnClient = client.withConfig({useCdn: true})
 export function sanityFetchFresh<T>(query: string, params: QueryParams = {}) {
-  return client.fetch<T>(query, params, {cache: 'no-store'})
+  return cdnClient.fetch<T>(query, params, {cache: 'no-store'})
 }
 
 /** Write client, server-only. Null when the token is not configured. */
