@@ -84,8 +84,11 @@ export const viewport: Viewport = {
 /**
  * Runs before first paint: applies the saved theme so night mode never
  * flashes white. Kept tiny and dependency-free on purpose.
+ * Also flags the browser's own forced dark mode (Samsung Internet, Chrome
+ * "dark mode for web contents"): it darkens the light theme with no opt-out,
+ * and `canvas` in a light color-scheme then stops being white.
  */
-const themeScript = `(function(){try{var t=localStorage.getItem('cr-theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t}}catch(e){}})()`
+const themeScript = `(function(){var r=document.documentElement;try{var t=localStorage.getItem('cr-theme');if(t==='light'||t==='dark'){r.dataset.theme=t}}catch(e){}try{var d=document.createElement('div');d.style.cssText='display:none;background-color:canvas;color-scheme:light';r.appendChild(d);if(getComputedStyle(d).backgroundColor!=='rgb(255, 255, 255)'){r.dataset.forcedDark=''}d.remove()}catch(e){}})()`
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
   const settings = await getSettings()

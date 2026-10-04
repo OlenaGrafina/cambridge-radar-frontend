@@ -40,7 +40,8 @@ export function NewsletterForm({source, compact = false}: {source: string; compa
           required
           autoComplete="email"
           placeholder="Type your email…"
-          className="field min-w-0 flex-1"
+          // flex-1 only in a row: in the stacked phone layout its 0 basis overrides the field height
+          className={cn('field min-w-0', compact ? 'flex-1' : 'sm:flex-1')}
         />
         <button
           type="submit"

@@ -64,6 +64,13 @@
   color-scheme: dark;
 }
 
+/* Browser-forced dark mode (see themeScript): the multiply-blended logo would
+   sink into the darkened header, so use the dark theme's logo treatment. */
+:root[data-forced-dark] {
+  --logo-filter: invert(1);
+  --logo-blend: screen;
+}
+
 /* Always-dark band (footer, newsletter): the same tokens, scoped. */
 .surface-dark {
   --paper: #0c0c0d;
