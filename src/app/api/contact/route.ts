@@ -26,7 +26,9 @@ export async function POST(req: Request) {
 
   const subject = form === 'contribute' ? 'Contribution proposal' : 'Contact form'
 
+  // `private.` ids are never served by the public dataset API (Sanity free plan datasets are public).
   await writeClient.create({
+    _id: `private.message-${crypto.randomUUID()}`,
     _type: 'contactMessage',
     handled: false,
     form,

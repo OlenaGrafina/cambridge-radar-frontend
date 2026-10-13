@@ -39,7 +39,8 @@ export async function POST(req: Request) {
   }
 
   if (existing) await writeClient.patch(existing._id).set(fields).commit()
-  else await writeClient.create({_type: 'subscriber', createdAt: now, ...fields})
+  // `private.` ids are never served by the public dataset API (Sanity free plan datasets are public).
+  else await writeClient.create({_id: `private.subscriber-${crypto.randomUUID()}`, _type: 'subscriber', createdAt: now, ...fields})
 
   if (!doubleOptIn) return json({message: 'You are subscribed. New analysis will arrive in your inbox.'})
 
