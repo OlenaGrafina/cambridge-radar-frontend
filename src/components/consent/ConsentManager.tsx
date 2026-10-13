@@ -11,12 +11,28 @@ export const OPEN_CONSENT_EVENT = 'cr:open-consent'
 
 type Consent = {analytics: boolean; at: string}
 
+/** A choice is valid for 12 months (UK ICO / GDPR practice), then the banner asks again. */
+const MAX_AGE_MS = 365 * 24 * 3600 * 1000
+
 function readConsent(): Consent | null {
   try {
     const raw = localStorage.getItem(KEY)
-    return raw ? (JSON.parse(raw) as Consent) : null
+    const saved = raw ? (JSON.parse(raw) as Consent) : null
+    if (!saved || !(Date.now() - new Date(saved.at).getTime() < MAX_AGE_MS)) return null
+    return saved
   } catch {
     return null
+  }
+}
+
+/** Withdrawn consent: delete the cookies GA4 and Clarity already set, on this host and its parent domain. */
+function clearTrackerCookies() {
+  const host = location.hostname
+  const domains = ['', host, `.${host}`, `.${host.split('.').slice(-2).join('.')}`]
+  for (const c of document.cookie.split(';')) {
+    const name = c.split('=')[0].trim()
+    if (!/^(_ga|_gid|_gat|_clck|_clsk|CLID|MUID)/.test(name)) continue
+    for (const d of domains) document.cookie = `${name}=; Max-Age=0; path=/${d ? `; domain=${d}` : ''}`
   }
 }
 
@@ -120,7 +136,8 @@ export function ConsentManager({gaId, clarityId, gtmId}: {gaId?: string; clarity
       localStorage.setItem(KEY, JSON.stringify(value))
     } catch {}
     if (!analytics && consent?.analytics) {
-      // Withdrawing consent: reload so already-loaded trackers are gone.
+      // Withdrawing consent: drop their cookies and reload so loaded trackers are gone.
+      clearTrackerCookies()
       window.location.reload()
       return
     }
