@@ -101,6 +101,9 @@ export function MobileMenu({settings}: {settings: Settings}) {
               ))}
             </ul>
           </nav>
+          <Link href="/contribute" className="btn btn-signal mt-6 w-full">
+            Contribute
+          </Link>
           <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-3">
             {(settings.topMenu ?? []).map((item) => (
               <li key={item.href}>
@@ -112,11 +115,6 @@ export function MobileMenu({settings}: {settings: Settings}) {
             <li>
               <Link href="/newsletter" className="t-ui text-ink-2">
                 Newsletter
-              </Link>
-            </li>
-            <li>
-              <Link href="/contribute" className="t-ui text-ink-2">
-                Contribute
               </Link>
             </li>
           </ul>

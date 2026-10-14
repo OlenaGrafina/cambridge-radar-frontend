@@ -67,11 +67,13 @@ npm run build && npm start   # продакшн-збірка локально
 | `src/app/[slug]/[article]/page.tsx` | Стаття |
 | `src/app/[slug]/page/[n]` · `src/app/all` · `src/app/tag` | Пагінація розділу, архів усіх статей, сторінки тем |
 | `src/app/authors` | Сторінка авторів і профілі |
+| `src/app/contribute` · `src/components/contribute/*` | Єдина сторінка Contribute (тексти в коді, картинки в `public/contribute`). Статичний маршрут сильніший за `[slug]`, тому однойменний документ у Sanity не відкривається |
 | `src/app/search` · `src/app/not-found.tsx` | Пошук і 404 |
-| `src/app/api/*` | Форми (`contact`, `subscribe`, `unsubscribe`) і вебхук `revalidate` |
+| `src/app/api/*` | Форми (`contact`, `ask-author`, `subscribe`, `unsubscribe`) і вебхук `revalidate`. `ask-author` — «Ask the author» під статтями: лист іде на контактну пошту з налаштувань сайту, назву статті й автора сервер бере зі Sanity |
+| `src/app/icon.png` · `apple-icon.png` · `favicon.ico` | Фавікон: гравюра King's College Chapel з логотипа |
 | `src/app/sitemap.ts` · `robots.ts` · `rss.xml` · `llms*.txt` · `opengraph-image.tsx` | SEO-файли |
 | `src/proxy.ts` | Переадресації з Sanity + прибирання слеша в кінці адреси |
-| `src/components/layout/*` | Шапка, меню, футер, пошук, плаваючі кнопки (підписка, доступність) |
+| `src/components/layout/*` | Шапка, меню, футер, пошук, плаваючі кнопки (підписка, доступність). Кнопка Contribute — у шапці, мобільному меню і смузі над футером (`ContributeBand`, ховається на `/contribute`) |
 | `src/components/article/*` | Текст статті, зміст, поширення, автор, попередня/наступна |
 | `src/components/home/*` · `section/*` · `story/*` | Блоки головної, сторінки розділу, картки статей |
 | `src/components/page/PageView.tsx` | Статичні сторінки та їхні форми |

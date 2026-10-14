@@ -34,6 +34,11 @@ export function Header({settings}: {settings: Settings}) {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link href="/contribute" className="btn btn-signal t-ui-sm h-8 px-3.5">
+                Contribute
+              </Link>
+            </li>
           </ul>
           {(settings.social ?? []).length > 0 && (
             <ul className="mr-2 flex items-center border-l border-rule pl-3" aria-label="Follow">

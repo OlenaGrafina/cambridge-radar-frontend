@@ -9,17 +9,20 @@ export function SectionHeading({
   href,
   index,
   className,
+  id,
   as: Tag = 'h2',
 }: {
   title: string
   href?: string
   index?: string
   className?: string
+  /** id for the heading, when a section is labelled by it. */
+  id?: string
   as?: 'h2' | 'h3'
 }) {
   return (
     <div className={cn('flex items-end justify-between gap-4 border-t-2 border-rule-strong pt-3', className)}>
-      <Tag className="t-h3 flex items-baseline gap-3">
+      <Tag id={id} className="t-h3 flex items-baseline gap-3">
         {index && <span className="meta">{index}</span>}
         {href ? (
           <Link href={href} className="hover-line">

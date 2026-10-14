@@ -1,7 +1,7 @@
 import {cache} from 'react'
 
 import {sanityFetch} from './sanity/client'
-import {dailyFeedQuery, earliestQuery, homeQuery, latestQuery, settingsQuery} from './sanity/queries'
+import {dailyFeedQuery, earliestQuery, homeQuery, latestQuery, settingsQuery, voicesQuery} from './sanity/queries'
 import type {AuthorRef, PostCard, Section, Settings} from './sanity/types'
 
 /** Pseudo-section for the archive of every article (/all — the old /category/all/). */
@@ -47,6 +47,9 @@ export const getLatest = cache((limit = 6) => sanityFetch<PostCard[]>(latestQuer
 
 /** The earliest articles: the small slider on the original section pages. */
 export const getEarliest = cache((limit = 4) => sanityFetch<PostCard[]>(earliestQuery, {limit}))
+
+/** Contributors for the proof strip on /contribute. */
+export const getVoices = cache((limit = 5) => sanityFetch<AuthorRef[]>(voicesQuery, {limit}).catch(() => []))
 
 /** The "Daily Feed" slider: the editor's hand-picked list, or the newest articles. */
 export const getDailyFeed = cache(async () => {

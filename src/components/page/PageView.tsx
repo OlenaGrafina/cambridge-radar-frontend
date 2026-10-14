@@ -16,9 +16,10 @@ import {absolute} from '@/lib/utils'
  * Static pages, laid out like the original: content on the left 8 columns,
  * "Latest Articles" on the right, "Share this:" under the content.
  *  - contact:    contact details (1/3) beside the contact form (2/3)
- *  - contribute: intro text (1/2) beside the contribution form (1/2)
  *  - newsletter: image (1/2) beside the text, then the closing heading
  *                with the sign-up form
+ * /contribute is its own route (app/contribute); a CMS page with the old
+ * "contribute" template falls back to the plain layout.
  */
 export function PageView({page, settings}: {page: Page; settings: Settings}) {
   const template = page.template ?? 'default'
@@ -35,7 +36,7 @@ export function PageView({page, settings}: {page: Page; settings: Settings}) {
       <PageHeader
         crumbs={[{label: 'Home', href: '/'}, {label: page.title}]}
         title={page.title}
-        lede={template === 'contribute' ? undefined : page.lede}
+        lede={page.lede}
       />
 
       <div className="grid-12 gap-y-section">
@@ -51,20 +52,6 @@ export function PageView({page, settings}: {page: Page; settings: Settings}) {
               <div className="md:col-span-2">
                 <ContactForm />
               </div>
-            </div>
-          )}
-
-          {template === 'contribute' && (
-            <div className="grid gap-x-col gap-y-10 md:grid-cols-2">
-              <div>
-                {page.lede && <p className="t-lead text-ink-2">{page.lede}</p>}
-                {page.body?.length ? (
-                  <div className="mt-6">
-                    <Body value={page.body} dropCap={false} />
-                  </div>
-                ) : null}
-              </div>
-              <ContactForm variant="contribute" />
             </div>
           )}
 
@@ -90,7 +77,7 @@ export function PageView({page, settings}: {page: Page; settings: Settings}) {
             </>
           )}
 
-          {template === 'default' && (
+          {(template === 'default' || template === 'contribute') && (
             <>
               {hasImage && (
                 <SanityImg

@@ -8,16 +8,15 @@ import {Turnstile} from './Turnstile'
 import {Honeypot, useFormPost} from './useFormPost'
 
 /**
- * The original site's two Contact Form 7 forms, same fields and labels:
- * Contacts (name, email, message) and Contribute (name, email, LinkedIn
- * profile, proposed title or topic). As with CF7, the form stays in place
- * after sending and the confirmation shows under it.
+ * The Contacts form: name, email, message. As with the original Contact
+ * Form 7, the form stays in place after sending and the confirmation shows
+ * under it. (The Contribute form lives in components/contribute.)
  */
-export function ContactForm({variant = 'contact'}: {variant?: 'contact' | 'contribute'}) {
+export function ContactForm() {
   const id = useId()
   const {status, message, submit, onToken, resetKey} = useFormPost('/api/contact', {
     event: 'generate_lead',
-    params: {form: variant},
+    params: {form: 'contact'},
   })
 
   return (
@@ -25,7 +24,7 @@ export function ContactForm({variant = 'contact'}: {variant?: 'contact' | 'contr
       className="relative grid gap-5 border-t border-rule-strong pt-6"
       onSubmit={(e) => {
         e.preventDefault()
-        submit(e.currentTarget, {form: variant})
+        submit(e.currentTarget, {form: 'contact'})
       }}
     >
       <label className="grid gap-2" htmlFor={`${id}-name`}>
@@ -36,23 +35,10 @@ export function ContactForm({variant = 'contact'}: {variant?: 'contact' | 'contr
         <span className="kicker">Your Email (required)</span>
         <input id={`${id}-email`} name="email" type="email" required autoComplete="email" className="field" />
       </label>
-      {variant === 'contribute' ? (
-        <>
-          <label className="grid gap-2" htmlFor={`${id}-linkedin`}>
-            <span className="kicker">LinkedIn Profile*</span>
-            <input id={`${id}-linkedin`} name="linkedin" type="url" required inputMode="url" className="field" />
-          </label>
-          <label className="grid gap-2" htmlFor={`${id}-topic`}>
-            <span className="kicker">Proposed Title or Topic*</span>
-            <textarea id={`${id}-topic`} name="topic" required rows={5} maxLength={5000} className="field" />
-          </label>
-        </>
-      ) : (
-        <label className="grid gap-2" htmlFor={`${id}-message`}>
-          <span className="kicker">Your Message</span>
-          <textarea id={`${id}-message`} name="message" rows={6} maxLength={5000} className="field" />
-        </label>
-      )}
+      <label className="grid gap-2" htmlFor={`${id}-message`}>
+        <span className="kicker">Your Message</span>
+        <textarea id={`${id}-message`} name="message" rows={6} maxLength={5000} className="field" />
+      </label>
       <Honeypot />
       <Turnstile onToken={onToken} resetKey={resetKey} />
       {status === 'error' && (

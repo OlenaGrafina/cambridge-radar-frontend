@@ -11,6 +11,8 @@ export function PageHeader({
   kicker,
   crumbs,
   title,
+  titleId,
+  size = 'display',
   aside,
   lede,
   children,
@@ -19,6 +21,10 @@ export function PageHeader({
   kicker?: string
   crumbs?: {label: string; href?: string}[]
   title: React.ReactNode
+  /** id for the h1, when a section is labelled by it. */
+  titleId?: string
+  /** `h1` for a headline that is a sentence rather than a name (landing pages). */
+  size?: 'display' | 'h1'
   aside?: React.ReactNode
   lede?: string
   children?: React.ReactNode
@@ -45,7 +51,9 @@ export function PageHeader({
         kicker && <p className="meta">{kicker}</p>
       )}
       <div className="mt-6 flex flex-col gap-4 border-b border-rule-strong pb-6 md:flex-row md:items-end md:justify-between md:gap-8 md:pb-8">
-        <h1 className="t-display">{title}</h1>
+        <h1 id={titleId} className={size === 'h1' ? 't-h1' : 't-display'}>
+          {title}
+        </h1>
         {aside && <div className="meta shrink-0 md:pb-3">{aside}</div>}
       </div>
       {lede && <p className="t-lead mt-6 max-w-measure text-ink-2">{lede}</p>}

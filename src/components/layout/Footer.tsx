@@ -6,6 +6,7 @@ import type {Settings} from '@/lib/sanity/types'
 
 import {ConsentLink} from '../consent/ConsentLink'
 import {CodeSiteCredit} from './CodeSiteCredit'
+import {ContributeBand} from './ContributeBand'
 import {Logo} from './Logo'
 
 /** Used until the footer menu is filled in Site settings → Menus. */
@@ -27,6 +28,7 @@ export function Footer({settings}: {settings: Settings}) {
     <footer className="surface-dark cv-auto mt-section bg-paper text-ink [contain-intrinsic-size:auto_640px]">
       {/* pb-24 keeps the floating Subscribe / accessibility buttons clear of the credit line */}
       <div className="shell pt-section pb-24">
+        <ContributeBand />
         <div className="grid-12 gap-y-12">
           <div className="col-span-12 md:col-span-5">
             <Link href="/" aria-label={`${settings.title} — home`} className="block w-fit">

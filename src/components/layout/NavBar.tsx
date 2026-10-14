@@ -90,6 +90,9 @@ export function NavBar({sections, title, logo}: {sections: MenuItem[]; title: st
               )}
               aria-hidden={!stuck}
             >
+              <Link href="/contribute" tabIndex={stuck ? 0 : -1} className="btn btn-signal t-ui-sm mr-2 h-8 px-3.5">
+                Contribute
+              </Link>
               <SearchButton />
               <ThemeToggle />
             </div>

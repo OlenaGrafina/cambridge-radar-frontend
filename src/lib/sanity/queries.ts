@@ -48,6 +48,16 @@ export const homeQuery = /* groq */ `{
   "authors": *[_type == "author" && defined(slug.current) && count(*[_type == "post" && references(^._id)]) > 0] | order(coalesce(order, 99) asc, name asc)${authorRef}
 }`
 
+/** Contributors with a photo and at least one published piece: the proof strip on /contribute. */
+export const voicesQuery = /* groq */ `*[_type == "author" && defined(slug.current) && defined(photo.asset) && !(isEditorial == true) && count(*[${published} && author._ref == ^._id]) > 0] | order(coalesce(order, 99) asc, name asc)[0...$limit]${authorRef}`
+
+/** The article an "Ask the author" question is about, read on the server so the form cannot mislabel it. */
+export const askAuthorTargetQuery = /* groq */ `*[${published} && slug.current == $slug][0]{
+  title,
+  "section": category->slug.current,
+  "author": author->name
+}`
+
 export const postQuery = /* groq */ `*[${published} && slug.current == $slug][0]{
   ${postCardFields},
   updatedAt,
@@ -58,7 +68,7 @@ export const postQuery = /* groq */ `*[${published} && slug.current == $slug][0]
   },
   tags,
   seo{..., image${image}},
-  "author": author->{${authorFields}, expertise, shortBio, links},
+  "author": author->{${authorFields}, expertise, shortBio, links, isEditorial},
   "otherSections": otherCategories[]->${sectionRef},
   "series": series->{
     title, "slug": slug.current,

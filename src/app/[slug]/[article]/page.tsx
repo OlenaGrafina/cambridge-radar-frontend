@@ -12,6 +12,7 @@ import {SubscribeModal} from '@/components/article/SubscribeModal'
 import {Lightbox} from '@/components/media/Lightbox'
 import {LatestArticles} from '@/components/sidebar/LatestArticles'
 import {Toc, TocDisclosure} from '@/components/article/Toc'
+import {AskAuthorForm} from '@/components/forms/AskAuthorForm'
 import {NewsletterForm} from '@/components/forms/NewsletterForm'
 import {SanityImg} from '@/components/media/SanityImg'
 import {Reveal} from '@/components/motion/Reveal'
@@ -299,6 +300,10 @@ export default async function ArticlePage({params}: Params) {
 
             <div className="mt-block">
               <AuthorCard author={post.author} />
+            </div>
+
+            <div className="mt-block">
+              <AskAuthorForm article={post.slug} authorName={post.author.name} editorial={post.author.isEditorial} />
             </div>
 
             <aside aria-label="Newsletter" className="mt-block border border-rule-strong p-6 md:p-8">
