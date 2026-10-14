@@ -1,46 +1,29 @@
 import {getSettings} from '@/lib/data'
 import {sanityFetch} from '@/lib/sanity/client'
-import {absolute, postPath} from '@/lib/utils'
+import {markdownPostsQuery} from '@/lib/sanity/queries'
+import {articleMarkdown, type PostMd} from '@/lib/markdown-docs'
+import {absolute} from '@/lib/utils'
 
 export const revalidate = 3600
 
-type Post = {
-  title: string
-  slug: string
-  excerpt?: string
-  publishedAt: string
-  section?: {title: string; slug: string}
-  author?: {name: string; role?: string}
-  text: string
-}
-
-const query = /* groq */ `*[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc){
-  title, "slug": slug.current, excerpt, publishedAt,
-  "section": category->{title, "slug": slug.current},
-  "author": author->{name, role},
-  "text": pt::text(body)
-}`
-
-/** Companion to llms.txt: the full text of every article as markdown. */
+/**
+ * Companion to llms.txt: every published article in full, as Markdown with its
+ * headings, lists, links and figures, newest first. One request gives an
+ * assistant the whole publication; each entry names its canonical address.
+ */
 export async function GET() {
-  const [settings, posts] = await Promise.all([getSettings(), sanityFetch<Post[]>(query)])
+  const [settings, posts] = await Promise.all([getSettings(), sanityFetch<PostMd[]>(markdownPostsQuery)])
   const md = [
-    `# ${settings.title} — full text`,
+    `# ${settings.title}: full text`,
     '',
-    `> Every published article, newest first. Source: ${absolute('/')}`,
+    `> ${posts.length} articles, newest first. Index: ${absolute('/llms.txt')}. Every page also has a Markdown twin at its address plus ".md".`,
     '',
-    ...posts.flatMap((p) => [
-      `## ${p.title}`,
-      '',
-      `URL: ${absolute(postPath(p))}`,
-      `Section: ${p.section?.title ?? '—'} · Published: ${p.publishedAt.slice(0, 10)}${p.author ? ` · Author: ${p.author.name}${p.author.role ? ` (${p.author.role})` : ''}` : ''}`,
-      '',
-      p.excerpt ? `> ${p.excerpt}\n` : '',
-      p.text,
-      '',
-      '---',
-      '',
-    ]),
+    ...posts.map((p) => articleMarkdown(p, settings, 2)),
   ].join('\n')
-  return new Response(md, {headers: {'Content-Type': 'text/markdown; charset=utf-8'}})
+  return new Response(md, {
+    headers: {
+      'Content-Type': 'text/markdown; charset=utf-8',
+      'Cache-Control': 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400',
+    },
+  })
 }

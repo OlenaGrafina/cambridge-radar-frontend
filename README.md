@@ -71,7 +71,9 @@ npm run build && npm start   # продакшн-збірка локально
 | `src/app/search` · `src/app/not-found.tsx` | Пошук і 404 |
 | `src/app/api/*` | Форми (`contact`, `ask-author`, `subscribe`, `unsubscribe`) і вебхук `revalidate`. `ask-author` — «Ask the author» під статтями: лист іде на контактну пошту з налаштувань сайту, назву статті й автора сервер бере зі Sanity |
 | `src/app/icon.png` · `apple-icon.png` · `favicon.ico` | Фавікон: гравюра King's College Chapel з логотипа |
-| `src/app/sitemap.ts` · `robots.ts` · `rss.xml` · `llms*.txt` · `opengraph-image.tsx` | SEO-файли |
+| `src/app/sitemap.ts` · `rss.xml` · `opengraph-image.tsx` | SEO-файли |
+| `src/app/robots.txt/route.ts` | robots.txt: явні групи для ШІ-краулерів (пошук, відповіді, навчання) і `Content-Signal`. Щоб заборонити лише навчання моделей — `ai-train=no` |
+| `src/app/llms.txt` · `llms-full.txt` · `src/app/md/[...path]` | Для ШІ: індекс `llms.txt`, повний текст усіх статей, і Markdown-копія кожної сторінки за адресою + `.md` (правило `rewrites` у `next.config.ts`). Конвертер — `src/lib/markdown.ts`, документи — `src/lib/markdown-docs.ts`; тексти `/contribute` — `src/components/contribute/content.ts` (спільні для сторінки й `.md`) |
 | `src/proxy.ts` | Переадресації з Sanity + прибирання слеша в кінці адреси |
 | `src/components/layout/*` | Шапка, меню, футер, пошук, плаваючі кнопки (підписка, доступність). Кнопка Contribute — у шапці, мобільному меню і смузі над футером (`ContributeBand`, ховається на `/contribute`) |
 | `src/components/article/*` | Текст статті, зміст, поширення, автор, попередня/наступна |

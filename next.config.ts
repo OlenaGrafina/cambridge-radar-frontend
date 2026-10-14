@@ -63,6 +63,11 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  // Every page has a Markdown twin at its address plus ".md": /business/some-article.md.
+  // It is one route (app/md) for articles, sections, authors, static pages and /contribute.
+  async rewrites() {
+    return [{source: '/:path(.+)\\.md', destination: '/md/:path'}]
+  },
   async redirects() {
     const fixed: Redirect[] = [
       {source: '/feed', destination: '/rss.xml', permanent: true},

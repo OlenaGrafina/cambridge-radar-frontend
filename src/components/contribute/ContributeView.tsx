@@ -10,6 +10,7 @@ import type {AuthorRef, MenuItem} from '@/lib/sanity/types'
 import {initials, pad} from '@/lib/utils'
 
 import {ContributeForm} from './ContributeForm'
+import {FORMATS, HERO, STEPS, TOPIC_NOTES, WHY} from './content'
 import {PitchLink} from './PitchLink'
 
 /**
@@ -31,70 +32,6 @@ const IMG = {
   topics: {src: '/contribute/topics.webp', alt: 'A punt passing beneath a wooden footbridge on the River Cam'},
 }
 
-const WHY = [
-  {
-    title: 'Your name on edited work',
-    text: 'Every piece is edited by our team and published under your byline, with an author profile that lists everything you write here.',
-  },
-  {
-    title: 'Work that stays findable',
-    text: 'Articles are listed on section and topic pages, included in site search and the RSS feed, so readers can still find yours months later.',
-  },
-  {
-    title: 'Context around your idea',
-    text: 'Your piece appears next to related analysis, so a reader who finishes it can follow the conversation to the next one.',
-  },
-  {
-    title: 'Readers beyond your network',
-    text: 'New articles go out through our newsletter and social channels, and are indexed for search and AI answer engines.',
-  },
-]
-
-const FORMATS = [
-  {
-    key: 'article',
-    title: 'Expert Article',
-    text: 'Share your analysis, experience or research with our readers.',
-    cta: 'Propose an article',
-  },
-  {
-    key: 'interview',
-    title: 'Interview',
-    text: 'In-depth conversations with leaders and experts.',
-    cta: 'Propose an interview',
-  },
-  {
-    key: 'perspectives',
-    title: 'Perspectives',
-    text: 'Shorter opinion pieces on key topics and trends.',
-    cta: 'Propose a perspective',
-  },
-  {
-    key: 'organisation',
-    title: 'Organisation Feature',
-    text: 'Highlight your initiative, research or event.',
-    cta: 'Propose a feature',
-  },
-] as const
-
-/** One line per section on the topics list; a new section simply shows its name. */
-const TOPIC_NOTES: Record<string, string> = {
-  business: 'Entrepreneurship, strategy and the companies shaping markets',
-  technology: 'Tools, platforms and the systems behind them',
-  ai: 'Models, applications and what follows from them',
-  leadership: 'Decisions, organisations and the future of work',
-  economy: 'Markets, policy and the forces behind growth',
-  geopolitics: 'Institutions, security and global affairs',
-  analysis: 'Long reads on what a development really means',
-}
-
-const STEPS = [
-  {title: 'Share your idea', text: 'Tell us your topic or proposal using the form below.'},
-  {title: 'Editorial review', text: 'We discuss the angle, the format and the next steps.'},
-  {title: 'Content development', text: 'Collaborative editing and refinement.'},
-  {title: 'Publication and promotion', text: 'Your piece goes live on Cambridge Radar and goes out to our readers.'},
-]
-
 export function ContributeView({
   sections,
   voices,
@@ -112,9 +49,9 @@ export function ContributeView({
           <div className="col-span-12 lg:col-span-7">
             <PageHeader
               crumbs={[{label: 'Home', href: '/'}, {label: 'Contribute'}]}
-              title="Share your ideas with a global audience"
+              title={HERO.title}
               titleId="contribute-title"
-              lede="Cambridge Radar is a thought leadership publication on leadership, innovation and global change. Pitch an article, an interview or a feature to our editors."
+              lede={HERO.lede}
               size="h1"
             >
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">

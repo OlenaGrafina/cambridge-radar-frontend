@@ -44,6 +44,7 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
     seo: a.seo,
     image: a.photo,
     type: 'profile',
+    markdown: `/authors/${a.slug}.md`,
   })
 }
 

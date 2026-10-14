@@ -164,6 +164,36 @@ export const sitemapQuery = /* groq */ `{
   "series": *[_type == "series" && defined(slug.current)]{"slug": slug.current, _updatedAt}
 }`
 
+/**
+ * Markdown for machines: llms-full.txt and a `.md` twin of every page. Bodies
+ * keep their structure (headings, lists, links, figures), unlike pt::text.
+ */
+const markdownBody = /* groq */ `body[]{..., _type == "figure" => ${image}, markDefs[]{...}}`
+const markdownPostFields = /* groq */ `
+  title, "slug": slug.current, excerpt, publishedAt, updatedAt, tags,
+  "section": category->{title, "slug": slug.current},
+  "author": author->{name, "slug": slug.current, role},
+  ${markdownBody}`
+
+export const markdownPostsQuery = /* groq */ `*[${published}] | order(publishedAt desc){${markdownPostFields}}`
+
+export const markdownPostQuery = /* groq */ `*[${published} && slug.current == $slug][0]{${markdownPostFields}}`
+
+export const markdownPageQuery = /* groq */ `*[_type == "page" && slug.current == $slug && seo.noIndex != true][0]{title, lede, ${markdownBody}}`
+
+export const markdownAuthorQuery = /* groq */ `*[_type == "author" && slug.current == $slug][0]{
+  name, role, subtitle, expertise, country, industry, shortBio, links,
+  "bio": bio[]{..., markDefs[]{...}},
+  "posts": *[${published} && author._ref == ^._id] | order(publishedAt desc){title, "slug": slug.current, excerpt, publishedAt, "section": category->{"slug": slug.current}}
+}`
+
+export const markdownSectionQuery = /* groq */ `*[_type == "category" && slug.current == $slug][0]{
+  title, description,
+  "posts": *[${published} && (category._ref == ^._id || ^._id in otherCategories[]._ref)] | order(publishedAt desc){
+    title, "slug": slug.current, excerpt, publishedAt, "section": category->{"slug": slug.current}, "author": author->name
+  }
+}`
+
 export const feedQuery = /* groq */ `*[${published}] | order(publishedAt desc)[0...30]{
   ${postCardFields},
   "body": pt::text(body)

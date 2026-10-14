@@ -8,6 +8,17 @@ export const SITE_NAME = 'Cambridge Radar'
 /** Staging/preview deployments set NEXT_PUBLIC_NOINDEX=1 so they never compete with the live site. */
 export const NOINDEX = process.env.NEXT_PUBLIC_NOINDEX === '1'
 
+/**
+ * Search engines and the AI features built on them may show the whole snippet,
+ * a large image and a long video preview. Without these hints Google applies
+ * its own, shorter limits.
+ */
+export const ROBOTS_OPEN = {
+  index: true,
+  follow: true,
+  googleBot: {index: true, follow: true, 'max-snippet': -1, 'max-image-preview': 'large', 'max-video-preview': -1},
+} as const
+
 /** Generated brand card (app/opengraph-image.tsx) for pages without an image. */
 const DEFAULT_OG = {url: '/opengraph-image', width: 1200, height: 630, alt: `${SITE_NAME} — Signals of What’s Next`}
 
@@ -24,6 +35,7 @@ export function buildMetadata({
   seo,
   image,
   type = 'website',
+  markdown,
   extra,
 }: {
   title: string
@@ -32,6 +44,8 @@ export function buildMetadata({
   seo?: Seo | null
   image?: SanityImage | null
   type?: 'website' | 'article' | 'profile'
+  /** Address of the page's Markdown twin; advertised as <link rel="alternate" type="text/markdown">. */
+  markdown?: string
   extra?: Partial<Metadata>
 }): Metadata {
   const metaTitle = seo?.title || title
@@ -42,8 +56,8 @@ export function buildMetadata({
   return {
     title: branded ? {absolute: metaTitle} : metaTitle,
     description: metaDescription,
-    alternates: {canonical: path},
-    robots: NOINDEX || seo?.noIndex ? {index: false, follow: !NOINDEX} : undefined,
+    alternates: {canonical: path, ...(markdown ? {types: {'text/markdown': markdown}} : {})},
+    robots: NOINDEX || seo?.noIndex ? {index: false, follow: !NOINDEX} : ROBOTS_OPEN,
     openGraph: {
       type,
       siteName: SITE_NAME,

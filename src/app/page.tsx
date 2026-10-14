@@ -20,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: seo?.title || `${s.title} — ${s.tagline ?? ''}`,
     description: seo?.description || s.description,
     path: '/',
+    markdown: '/llms.txt',
   })
 }
 

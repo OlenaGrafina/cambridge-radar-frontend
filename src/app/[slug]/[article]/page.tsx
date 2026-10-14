@@ -47,6 +47,7 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
     seo: post.seo,
     image: post.mainImage,
     type: 'article',
+    markdown: `${postPath(post)}.md`,
     extra: {
       authors: post.author ? [{name: post.author.name, url: absolute(`/authors/${post.author.slug}`)}] : undefined,
       other: {

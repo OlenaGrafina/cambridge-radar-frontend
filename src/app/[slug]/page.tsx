@@ -39,10 +39,11 @@ export async function generateMetadata({params}: Params): Promise<Metadata> {
       description: s.description,
       path: `/${s.slug}`,
       seo: s.seo,
+      markdown: `/${s.slug}.md`,
     })
   }
   const p = found.page
-  return buildMetadata({title: p.title, description: p.lede, path: `/${p.slug}`, seo: p.seo, image: p.image})
+  return buildMetadata({title: p.title, description: p.lede, path: `/${p.slug}`, seo: p.seo, image: p.image, markdown: `/${p.slug}.md`})
 }
 
 export default async function SlugPage({params}: Params) {

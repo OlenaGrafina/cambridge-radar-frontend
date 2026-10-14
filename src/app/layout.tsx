@@ -11,7 +11,7 @@ import {Header} from '@/components/layout/Header'
 import {JsonLd} from '@/components/seo/JsonLd'
 import {getSettings} from '@/lib/data'
 import {imageUrl} from '@/lib/sanity/image'
-import {NOINDEX} from '@/lib/seo'
+import {NOINDEX, ROBOTS_OPEN} from '@/lib/seo'
 import {SITE_URL} from '@/lib/utils'
 
 import './globals.css'
@@ -66,7 +66,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ...(s.bingVerification ? {other: {'msvalidate.01': s.bingVerification}} : {}),
     },
     formatDetection: {telephone: false},
-    ...(NOINDEX ? {robots: {index: false, follow: false}} : {}),
+    robots: NOINDEX ? {index: false, follow: false} : ROBOTS_OPEN,
   }
 }
 
