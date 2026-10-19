@@ -4,7 +4,7 @@ import {sanityFetch} from '@/lib/sanity/client'
 import type {PostCard} from '@/lib/sanity/types'
 import {absolute, postPath} from '@/lib/utils'
 
-export const revalidate = 3600
+export const revalidate = 86400
 
 type Data = {
   posts: (PostCard & {updatedAt?: string})[]

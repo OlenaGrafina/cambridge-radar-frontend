@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/Link'
 
 import type {PostCard} from '@/lib/sanity/types'
 import {cn, formatDate, formatShortDate, readingTime} from '@/lib/utils'

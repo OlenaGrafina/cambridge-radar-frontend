@@ -9,9 +9,9 @@ import {LatestArticles} from '@/components/sidebar/LatestArticles'
 import {StoryCard, StoryFeature} from '@/components/story/Story'
 import {getDailyFeed, getEarliest, getLatest} from '@/lib/data'
 import type {PostCard, Section} from '@/lib/sanity/types'
-import {absolute, cn, postPath} from '@/lib/utils'
+import {absolute, cn, PAGE_SIZE, postPath} from '@/lib/utils'
 
-export const PAGE_SIZE = 9
+export {PAGE_SIZE}
 
 export async function SectionView({
   section,

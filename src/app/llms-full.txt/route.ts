@@ -4,7 +4,7 @@ import {markdownPostsQuery} from '@/lib/sanity/queries'
 import {articleMarkdown, type PostMd} from '@/lib/markdown-docs'
 import {absolute} from '@/lib/utils'
 
-export const revalidate = 3600
+export const revalidate = 86400
 
 /**
  * Companion to llms.txt: every published article in full, as Markdown with its

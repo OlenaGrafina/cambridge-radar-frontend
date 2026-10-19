@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/Link'
 
 import {NETWORK_LABEL, RssIcon, SocialIcon} from '@/components/icons'
 import {NewsletterForm} from '@/components/forms/NewsletterForm'

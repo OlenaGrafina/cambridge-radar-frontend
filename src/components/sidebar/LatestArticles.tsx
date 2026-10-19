@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/Link'
 
 import {getLatest} from '@/lib/data'
 import {cn, postPath} from '@/lib/utils'

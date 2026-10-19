@@ -1,4 +1,5 @@
 import {createClient, type QueryParams} from '@sanity/client'
+import {unstable_cache} from 'next/cache'
 
 export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'polcbwiw'
 export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
@@ -17,16 +18,23 @@ const client = createClient({
 
 /**
  * Cached read. Pages are static and only rebuild when Sanity publishes
- * (webhook → revalidateTag). The hourly revalidate is a safety net for
+ * (webhook → revalidateTag). The daily revalidate is a safety net for
  * scheduled posts and a missed webhook.
+ *
+ * Vercel bills an ISR write only when the cached value changes. The fetch
+ * cache stored Sanity's raw response, whose "ms" timing differs every time, so
+ * each hourly revalidation was a write even with no new content: 217K in a
+ * month on a 200K free plan. unstable_cache stores the result alone, which
+ * stays byte-identical until an editor publishes.
  */
-export function sanityFetch<T>(query: string, params: QueryParams = {}, revalidate = 3600) {
-  return withRetry(() =>
-    client.fetch<T>(query, params, {
-      cache: 'force-cache',
-      next: {tags: [CONTENT_TAG], revalidate},
-    }),
-  )
+const cachedFetch = unstable_cache(
+  (query: string, params: QueryParams) => withRetry(() => client.fetch<unknown>(query, params, {cache: 'no-store'})),
+  ['sanity-fetch'],
+  {tags: [CONTENT_TAG], revalidate: 86400},
+)
+
+export function sanityFetch<T>(query: string, params: QueryParams = {}) {
+  return cachedFetch(query, params) as Promise<T>
 }
 
 /** A dropped TLS handshake must not fail a whole static build: retry with backoff. */

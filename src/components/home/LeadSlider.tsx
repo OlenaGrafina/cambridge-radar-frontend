@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/components/Link'
 import {useCallback, useEffect, useRef, useState} from 'react'
 
 import {ArrowLeft, ArrowRight} from '@/components/icons'

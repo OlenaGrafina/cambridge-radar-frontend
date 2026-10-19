@@ -5,7 +5,7 @@ import {feedQuery} from '@/lib/sanity/queries'
 import type {PostCard} from '@/lib/sanity/types'
 import {absolute, postPath, SITE_URL} from '@/lib/utils'
 
-export const revalidate = 3600
+export const revalidate = 86400
 
 const esc = (s = '') =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;')
@@ -39,7 +39,7 @@ export async function GET() {
     <description>${esc(settings.description ?? settings.tagline ?? '')}</description>
     <language>en-gb</language>
     <atom:link href="${absolute('/rss.xml')}" rel="self" type="application/rss+xml" />
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>${items}
+    <lastBuildDate>${new Date(posts[0]?.publishedAt ?? 0).toUTCString()}</lastBuildDate>${items}
   </channel>
 </rss>`
 

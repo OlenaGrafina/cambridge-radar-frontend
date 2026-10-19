@@ -16,7 +16,7 @@ import {
 } from '@/lib/markdown-docs'
 import {absolute, postPath} from '@/lib/utils'
 
-export const revalidate = 3600
+export const revalidate = 86400
 
 type Params = {params: Promise<{path: string[]}>}
 

@@ -1,5 +1,8 @@
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cambridge-radar.com').replace(/\/$/, '')
 
+/** Stories per archive page: sections, tags, /all. */
+export const PAGE_SIZE = 9
+
 export function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(' ')
 }

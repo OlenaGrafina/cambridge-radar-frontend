@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/Link'
 
 import {ArrowRight, NETWORK_LABEL, SocialIcon} from '@/components/icons'
 import {SanityImg} from '@/components/media/SanityImg'

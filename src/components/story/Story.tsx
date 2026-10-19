@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/Link'
 
 import {SanityImg} from '@/components/media/SanityImg'
 import type {PostCard} from '@/lib/sanity/types'

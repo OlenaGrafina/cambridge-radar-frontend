@@ -13,6 +13,10 @@ import {absolute, postPath} from '@/lib/utils'
  *   Secret   = SANITY_REVALIDATE_SECRET
  *
  * 1. Expires every cached Sanity read, so the next visitor gets fresh pages.
+ *    Only for published, public content: drafts, image uploads, redirects
+ *    (src/proxy.ts reads them itself) and private.* documents (subscribers,
+ *    form messages) never show on a page, and each purge rewrites the whole
+ *    site into Vercel's ISR cache.
  * 2. A newly published article → newsletter to active subscribers (once).
  */
 
@@ -31,6 +35,9 @@ async function validSignature(req: Request, raw: string, secret: string) {
 }
 
 const FRESH_HOURS = 72
+
+/** Documents that never render on a page: changing them must not purge the cache. */
+const SKIP_TYPES = new Set(['subscriber', 'contactMessage', 'redirect', 'sanity.imageAsset', 'sanity.fileAsset'])
 
 async function sendNewsletter(postId: string) {
   if (!writeClient || !emailEnabled()) return 'email disabled'
@@ -84,12 +91,16 @@ export async function POST(req: Request) {
   if (!(await validSignature(req, raw, secret))) return json({error: 'Invalid signature'}, 401)
 
   const body = (JSON.parse(raw || '{}') ?? {}) as {_id?: string; _type?: string}
+  const id = (body._id ?? '').replace(/^drafts\./, '')
+  const isDraft = Boolean(body._id?.startsWith('drafts.'))
+  if (isDraft || id.startsWith('private.') || SKIP_TYPES.has(body._type ?? '')) {
+    return json({revalidated: false, type: body._type})
+  }
   revalidateTag(CONTENT_TAG, {expire: 0})
 
-  const id = (body._id ?? '').replace(/^drafts\./, '')
   let extra: string | undefined
   try {
-    if (body._type === 'post' && id && !body._id?.startsWith('drafts.')) extra = await sendNewsletter(id)
+    if (body._type === 'post' && id) extra = await sendNewsletter(id)
   } catch (e) {
     console.error('[revalidate] side effect failed', e)
     extra = 'side effect failed'
