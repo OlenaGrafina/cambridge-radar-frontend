@@ -71,6 +71,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     const fixed: Redirect[] = [
       {source: '/feed', destination: '/rss.xml', permanent: true},
+      // The Yoast sitemap is still the one submitted in Search Console
+      {source: '/sitemap_index.xml', destination: '/sitemap.xml', permanent: true},
       {source: '/category/all', destination: '/all', permanent: true},
       {source: '/category/:slug', destination: '/:slug', permanent: true},
       {source: '/profile/:slug', destination: '/authors/:slug', permanent: true},

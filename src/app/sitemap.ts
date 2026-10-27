@@ -5,6 +5,11 @@ import {sitemapQuery} from '@/lib/sanity/queries'
 import {getTags} from '@/lib/tags'
 import {absolute} from '@/lib/utils'
 
+// Without it the sitemap is frozen at build time: articles published after a
+// deploy never reached it. Same cadence as rss.xml and llms.txt; the publish
+// webhook refreshes it sooner.
+export const revalidate = 86400
+
 type Row = {slug: string; _updatedAt?: string; updated?: string; section?: string; noIndex?: boolean}
 type Data = {posts: Row[]; sections: Row[]; pages: Row[]; authors: Row[]; series: Row[]}
 
